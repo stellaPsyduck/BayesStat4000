@@ -1,0 +1,214 @@
+\documentclass{beamer}
+%\documentclass[aspectratio=169]{beamer} % 使用 16:9 宽屏比例
+\usepackage{hyperref}
+\usepackage[T1]{fontenc}
+
+% other packages
+\usepackage{latexsym,amsmath,xcolor,multicol,booktabs,calligra}
+\usepackage{graphicx,pstricks,listings,stackengine}
+
+\author{Stella Rovazzi}
+\title{Perturbation in XAI}
+\subtitle{Understanding their affect on models and metrics}
+\institute{University of Guelph}
+\date{Summer 2026}
+\usepackage{CNU}
+
+% defs
+\def\cmd#1{\texttt{\color{red}\footnotesize $\backslash$#1}}
+\def\env#1{\texttt{\color{blue}\footnotesize #1}}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{halfgray}{gray}{0.55}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\bfseries\color{deepblue},
+    emphstyle=\ttfamily\color{deepred},    % Custom highlighting style
+    stringstyle=\color{deepgreen},
+    numbers=left,
+    numberstyle=\small\color{halfgray},
+    rulesepcolor=\color{red!20!green!20!blue!20},
+    frame=shadowbox,
+}
+
+\AtBeginSubsection{}
+\begin{document}
+
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+{\AtBeginSection{}
+\section{Introduction}}
+\subsection{Research Objectives and Expected Outcomes}
+
+\begin{frame}{Introduction} % Stella
+
+    \textbf{Motivation:} Help researchers and developers make informed perturbation choices to improve explanations. \\
+        \vspace{0.5cm}      
+   
+    \begin{enumerate}
+        \item To examine how the choice of perturbation technique effects an explanation's output (LIME)
+        \item To examine how the choice of perturbation technique effects a metric's output (Sensitivity, Fidelity, Relative Stability)
+        \item To explore common patterns between the experiment's tests and understand the effects of the studied perturbation techniques
+    \end{enumerate}
+        \vspace{0.5cm}      
+	\textbf{Expected Outcome:} Resampling, or recreation, is the most reliable and universal perturbation technique.
+
+\end{frame}
+
+
+{\setbeamertemplate{subsection page}{}
+\subsection{Methodology}} % Stella
+
+\begin{frame} % Stella or Adil: Lattice Definition and why secure --> Fixing noise from lengthy lattices --> Making algebraic w LWE --> Putting togetrher
+\tableofcontents[sectionstyle=show,subsectionstyle=show/shaded/hide,subsubsectionstyle=show/shaded/hide]
+\end{frame}
+
+\begin{frame}{Methodology - Model}
+            \begin{enumerate}
+                \item Train one-hidden layer FNN on benchmark datset
+                \item Fit the LIME model with each of the perturbation techniques
+                \item Calculate the gradient (to find the "true" feature importance) of the black-box
+                \item Evaluate the explanatory vectors' distance from the "true" explanatory vector with the normalized euclidean distance, cosine similarity, and spearman ranking
+            \end{enumerate}
+\end{frame}
+
+\begin{frame}{Methodology - Metric}
+        \begin{enumerate}
+            \item Train one-hidden layer FNN model on benchmark datset
+            \item Fit decision tree explainer(s) to each output of FNN model (control local models)
+            \item Find the Fidelity of the model with each of the perturbation techniques
+            \item Compare the different results of the metrics, dependent on the perturbation chosen
+            \item Repeat steps 1 to 4 for sensitivity
+        \end{enumerate}
+\end{frame}
+
+\begin{frame}{Perturbation Methods}
+    \begin{itemize}
+        \item \textbf{Gaussian} - Resampling method following a $N(0, 1)$, shifted to centre around the feature's mean
+        \item \textbf{Latin Hypercube Sampling} - Another resampling method, with a different distribution
+        \item \textbf{Replace with Mean}* - Replaces given value with the mean
+        \item \textbf{Replace with Mean conditioned on threshold}* - Replace given value with mean if it follows some condition 
+        \item \textbf{Reduction}* - Replace value with a minimized amount (based on softmasking)
+    \end{itemize}
+
+    \vspace{0.5cm}
+
+    \textit{* are custom methods that also use a binary masks to ensure the entire feature column is not replaced by another value}
+\end{frame}
+
+\begin{frame}{Expiremental Setting}
+
+\tiny
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{0.9}
+\resizebox{\textwidth}{!}{      
+    \begin{tabular}{|p{0.22\textwidth}|p{0.32\textwidth}|p{0.28\textwidth}|}
+        \hline
+        \textbf{Research question} &
+        \textbf{Independent variable} &
+        \textbf{Dependent variable} \\
+        \hline
+        Affect on Models &
+        \begin{itemize}
+            \item Dataset (Wine Data)
+            \item Feed-Forward Neural Network
+            \item "True" Explantory Vector (or calculated gradient)
+        \end{itemize} &
+        Lime's Explanatory Vectors \\
+        \hline 
+        Affect on Metrics &
+        \begin{itemize}
+            \item Dataset (Wine Data)
+            \item FNN
+            \item Decision Tree Explainers (One for each observation of test set)
+            \item Perturbed inputs (metrics calculated in one loop and seed set)
+        \end{itemize} &
+        Metric Values (Sensitivty, Infidelity) \\
+        \hline
+    \end{tabular}
+    }
+\end{frame}
+
+\section{Results}
+{\setbeamertemplate{subsection page}{}
+\subsection{LIME}} % Stella
+
+\begin{frame}{Normalized Euclidean Distance}
+   \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{euclidean_vs_true} % Omit extension (.jpg/.png)
+    \caption{Comparing the gradient to LIME perturbed explanatory vectors.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Cosine Similarity}
+   \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{cosine_similarity_vs_true} % Omit extension (.jpg/.png)
+    \caption{Comparing the gradient to LIME perturbed explanatory vectors.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Spearman Ranking}
+   \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{spearman_rank_vs_true} % Omit extension (.jpg/.png)
+    \caption{Comparing the gradient to LIME perturbed explanatory vectors.}
+    \end{figure}
+\end{frame}
+
+{\setbeamertemplate{subsection page}{}
+\subsection{Infidelity}} % Stella
+
+\begin{frame}{Infidelity}
+    \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{tree_infid_class_both} % Omit extension (.jpg/.png)
+    \caption{Infidelity of Each Method}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Infidelity}
+    \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{ActvsPred.png} % Omit extension (.jpg/.png)
+    \caption{Comparison of Assessing the Change}
+    \end{figure}
+\end{frame}
+
+{\setbeamertemplate{subsection page}{}
+\subsection{Sensitivity}} % Stella
+
+\begin{frame}{Sensitivity}
+    \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{maximum_sensitivity} % Omit extension (.jpg/.png)
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Sensitivity}
+    \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{mean_sensitivity} % Omit extension (.jpg/.png)
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Sensitivity}
+    \begin{figure}% [H] forces the image to stay exactly HERE
+    \includegraphics[width=0.85\textwidth]{worstvsmax} % Omit extension (.jpg/.png)
+    \end{figure}
+\end{frame}
+
+\section{Findings}
+
+\begin{frame}{Findings/Current Thoughts}
+    \begin{itemize}
+        \item Some form of resampling is likely the strongest for an explainer model, over other perturbations. You want to mimic the data's behaviour
+        properly.
+        \item Reduction can force a perturbation based metric make a model look better than it may be
+        \item I have the decision tree's comparisons to the gradient vector - and I feel like that may make my metric section stronger but
+        I haven't figured out how to properly tie it in yet.
+    \end{itemize}
+\end{frame}
+\end{document}
