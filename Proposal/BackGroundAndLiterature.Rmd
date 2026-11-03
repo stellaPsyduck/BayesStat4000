@@ -1,0 +1,45 @@
+---
+title: '**Final Project**'
+author: "STAT*4000 - Statistical Computing"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+header-includes:
+- \linespread{1.3}
+- \newcommand{\R}{{\textsf{R}}}
+- \usepackage{graphics,color,graphicx}
+- \usepackage{url}
+- \usepackage{tabularx}
+- \definecolor{shadecolor}{RGB}{225, 225, 225}
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+
+Renard, B., Garreta, V., and Lang, M. (2006), 
+“An application of Bayesian analysis and Markov chain Monte Carlo methods to the estimation of a regional trend in annual maxima,” 
+Water Resources Research, 
+42, 
+2005WR004591.  https://doi.org/10.1029/2005WR004591.
+
+We can use Bayesian inference in order to assess the suitability of a proposed model for a dynamic system. 
+$$
+\begin{aligned}
+P(M_j|X) &= \frac{P(X|M_j)\pi(M_j)}{\sum_{i=1}^{q}P(M_i|X)\pi(M_i)}
+\end{aligned}
+$$
+Where $M_k$ is the kth proposed model, q is the number of models we propose, and $\pi(M_k)$ is the probability of using model $M_k$ within a Markov chain comprised of porposed models.
+$P(X|M) = \int P(X,\theta|M)d\theta$ is extremely difficult to solve numerically for high dimensions.  So, we approximate $P(X|M)$ using MCMC methods and reassess suitability using Bayes factors where the Bayes factor comparing model i and model j is:
+
+$$
+\begin{aligned}
+B_{i,j} = \frac{P(X|M_i)}{P(X|M_j)}
+\end{aligned}
+$$
+
+Where the usage of model $M_i$ is supported by high values of $B_{i,j}$.
+
+It is important to note that $M_i$ and $M_j$ are not neccessarily of different distributions, but instead different parameters chosen.  In this application, the Markov chain is comprised of iteratively selecting different parameters (denoted as $\theta^\tau$ where $\tau$ is the $\tau$th vector of parameters generated).
