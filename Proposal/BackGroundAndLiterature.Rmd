@@ -31,8 +31,10 @@ $$
 P(M_j|X) &= \frac{P(X|M_j)\pi(M_j)}{\sum_{i=1}^{q}P(M_i|X)\pi(M_i)}
 \end{aligned}
 $$
-Where $M_k$ is the kth proposed model, q is the number of models we propose, and $\pi(M_k)$ is the probability of using model $M_k$ within a Markov chain comprised of porposed models.
-$P(X|M) = \int P(X,\theta|M)d\theta$ is extremely difficult to solve numerically for high dimensions.  So, we approximate $P(X|M)$ using MCMC methods and reassess suitability using Bayes factors where the Bayes factor comparing model i and model j is:
+Where $M_k$ is the kth proposed model, q is the number of models we propose, and $\pi(M_k)$ is the probability of using model $M_k$.  It is important to note that $M_i$ and $M_j$ are not neccessarily of different distributions, but perhaps different parameters chosen for the same distribution.
+$P(X|M) = \int P(X,\theta|M)d\theta$ is extremely difficult to solve numerically for high dimensions.  However, it acts as a normalizing factor and we can instead sample $P(X|M_j)\pi(M_j)$ using MCMC methods.  We can aestimate the normalizing factor via the eCDF, as without doing so would cause our samples to be improperly scaled
+
+Comparing between models can be done via Bayes factors, where we compare the ith and jth model using:
 
 $$
 \begin{aligned}
@@ -42,4 +44,8 @@ $$
 
 Where the usage of model $M_i$ is supported by high values of $B_{i,j}$.
 
-It is important to note that $M_i$ and $M_j$ are not neccessarily of different distributions, but instead different parameters chosen.  In this application, the Markov chain is comprised of iteratively selecting different parameters (denoted as $\theta^\tau$ where $\tau$ is the $\tau$th vector of parameters generated).
+In this application, the Markov chain is comprised of iteratively selecting different parameters (denoted as $\theta^\tau$ where $\tau$ is the $\tau'\text{th}$ vector of parameters generated).
+
+
+
+To quantify the convergence of an mcmc model across different starting points, we can use the Gelman-Rubin statistic.  The statistic is a measurement of variability between chains, and is further 
