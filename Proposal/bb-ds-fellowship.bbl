@@ -1,9 +1,8 @@
 \begin{thebibliography}{}
 
-\bibitem[Witaker, nd]{william_wit}
-Witaker, W. (n.d.).
-\newblock Whitaker's words.
-\newblock \url{https://latin-words.com/}.
-\newblock Accessed: 2026-06-08.
+\bibitem[Ripley and Venables, 2009]{ripley_mass_2009}
+Ripley, B. and Venables, B. (2009).
+\newblock {MASS}: {Support} {Functions} and {Datasets} for {Venables} and {Ripley}'s {MASS}.
+\newblock Institution: Comprehensive R Archive Network Pages: 7.3-66.
 
 \end{thebibliography}
