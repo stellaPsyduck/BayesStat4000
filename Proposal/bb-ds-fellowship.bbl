@@ -1,4 +1,4 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{7}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -21,6 +21,14 @@ Jiqiang Guo, Jonah Gabry, Ben Goodrich, Andrew Johnson, Sebastian Weber, and Ham
 \newblock rstan: {R} {Interface} to {Stan}, July 2015.
 \newblock URL \url{https://CRAN.R-project.org/package=rstan}.
 \newblock Institution: Comprehensive R Archive Network Pages: 2.32.7.
+
+\bibitem[Renard et~al.(2006)Renard, Garreta, and Lang]{renard_application_2006}
+B.~Renard, V.~Garreta, and M.~Lang.
+\newblock An application of {Bayesian} analysis and {Markov} chain {Monte} {Carlo} methods to the estimation of a regional trend in annual maxima.
+\newblock \emph{Water Resources Research}, 42\penalty0 (12):\penalty0 2005WR004591, December 2006.
+\newblock ISSN 0043-1397, 1944-7973.
+\newblock \doi{10.1029/2005WR004591}.
+\newblock URL \url{https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2005WR004591}.
 
 \bibitem[Ripley and Venables(2009)]{ripley_mass_2009}
 Brian Ripley and Bill Venables.
