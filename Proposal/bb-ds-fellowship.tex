@@ -46,12 +46,22 @@
 % \begin{multicols*}{2}
  
 \section{Project Overview} 
- *maybe quick paragraph here*
-\subsection*{Objectives}
 
-\begin{itemize}
-\item bleh \cite{ripley_mass_2009} 
-\end{itemize}
+
+Our group will be concerned with understanding, briefly educating, and producing a short report on Bayesian estimation. The framework assumes that parameters of interest are random with probability distributions that describe their uncertainty conditional on the observed dataset. It also treats the dataset as fixed, unlike a frequentist framework where the parameters are fixed and the data is assumed to be random and a result of repeated sampling from a larger population. 
+
+The computational method of choice for Bayesian estimation is the gibbs sampling method, which is a part of the Markov Chain Monte Carlo family. MCMC acts as the engine for Bayestan estimation, since it's not always possible to mathematically calculate the posterior distribution. Gibbs sampling is useful when the joint probability distribution $P(X,Y)$ is difficult to sample from directly, but sampling from the conditional distributions, $P(X|Y)$ and $P(Y|X)$ is feasible. We will start with a simple normal model that has known theoretical properties, and we want to see if our computational sampling method is approaching the expected distribution, in a sense we're looking to see if the history of the random walk traces out the probability distribution of interest. We then plan to explore more advanced models.
+
+The spirit of the project is to quantify how accurately these computational methods help us converge the posterior.
+
+\subsection{Objectives}
+\subsubsection{Simulation Study}
+We start of with a straightforward example using a normal model and we see how our simulation results compare to the theoretical results. After establishing the basic framework we extend the application to real data, then we explore how we can extend the methodology for hierarchical models.  
+
+
+\subsubsection{Evaluating the Posterior}
+We will assess the means, variances, and credible intervals of posterior means, and discuss how simulation error and sample size influence our results. We will also investigate the convergence of our estimated posteriors using three methods: the Gelman-Rubin statistic $\sqrt{\hat{R}}$, the gibbs stopper method, and random initialization. 
+
 
 \section{Background and Literature}
 \subsection*{Bayesian Data Analysis, \citet{gelman_bayesian_2014}}
