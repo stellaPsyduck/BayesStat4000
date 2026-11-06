@@ -1,0 +1,78 @@
+Proposal Due Date:
+6 November, 2026
+
+Have following completed by 13 November, 2026:
+    Ramez
+        Describe how Bayesian inference works in a broad sense
+        Describe how an MLE is differs from Bayesian inference and why you would use one versus another
+
+
+    Stella
+        Have simple simulation created for use in report and presentation
+
+
+    Brenden
+        Find real world examples of this workflow
+        Define what a hierarchical model is, and where they are found in studies
+
+
+Have following done by 20 November, 2026
+    Make slides of your parts 
+
+Create presentation (Not necessarily a divying of work, but what each person will talk about)
+    Ramez section:
+        Motivation for Bayesian statistics
+            How does it differ from frequentist methods?
+
+        What is Gibbs sampling?
+        How does this affect the model parameters?
+        How do we know if one model is better than another?
+
+    Stella section:
+        How does an MLE compare?  Where do its shortcomings lie?
+        How does the Bayesian inference overcome these shortcomings?
+
+
+        Present an example of our model at work
+        Visually show the parameters walking through parameter space
+        Can use the simple example in BDA C.3
+
+    Brenden section:
+        Show how we update the model paramters in this context
+        Show the Geman-Rubin Statistic with our homemade Markov-chains and what the statistic represents
+
+        Expand to real world examples of this workflow being used
+        Give an overwiew on hierarchical models, and how this workflow is applied to them
+
+
+
+
+Presentation Done By:
+22 November, 2026
+Done by this date so we have time to practice
+
+Presentations Start:
+24 November, 2026
+
+Report creation:
+
+Ramez:
+    Motivation for Bayesian inference
+
+Stella
+    Simulation implementation and computational strategy
+
+Brenden
+    Research real-life applications and uses of this workflow in hierarchical models
+    
+Have report near completion, ready for editing.
+
+Report Due Date:
+4 December, 2026
+
+Expectations of findings:
+    We would expect our model to be able to approximately sample from the wanted distribution through mcmc methods, 
+    and be able to estimate the model parameters for further analysis.
+    We would expect to be able to find quantities of interest using our simulation.
+    Depending on how much time we have, we may or may not pursue learning about and implementing a hierarchical model.
+    While we do not necessarily intend to focus much if at all on them in the presentation, they are a valuable tool to be aware of and know hwo to implement.
