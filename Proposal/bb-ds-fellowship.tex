@@ -20,7 +20,7 @@
 \bibliographystyle{plainnat}
 \setcitestyle{numbers,square}
 
-\usepackage[a4paper,left=1.50cm, right=1.50cm, top=1.50cm, bottom=1.50cm]{geometry}
+\usepackage[a4paper,left=2.50cm, right=2.50cm, top=2.0cm, bottom=2.0cm]{geometry}
 
 
 \author{}
@@ -45,35 +45,50 @@
 	
 % \begin{multicols*}{2}
  
-\section*{Project Overview} 
-
+\section{Project Overview} 
+ *maybe quick paragraph here*
 \subsection*{Objectives}
 
 \begin{itemize}
 \item bleh \cite{ripley_mass_2009} 
 \end{itemize}
 
-\subsection{Background and Literature}
-
+\section{Background and Literature}
+\subsection*{Bayesian Data Analysis, \citet{gelman_bayesian_2014}}
 \section{Proposed Computational Strategy}
-\subsection*{Simple Example}
+\subsection{Quantities of Interest}
+
+\begin{itemize}
+	\item Estimated parameter mean and variance/standard deviation
+	\item credible intervals (informs us of the posterior model) \cite{gelman_bayesian_2014} 
+	\item Gelman-Rubin Statistic (Convergence Assessment) \cite{rizzo_statistical_2019}
+	\item Rate of Convergence (/Assessing with Gibbs Stopper) \cite{tanner_tools_1996}
+	\item Warm-up range
+	\item Maximum a priori
+\end{itemize}
+
+\subsection{Required Libraries}
+\begin{itemize}
+	\item MASS  for the bivariate normal generation (or basic R) \cite{ripley_mass_2009}
+	\item STAN for the actual MCMC/Gibs sampling – we may some examples by hand \cite{guo_rstan_2015}
+\end{itemize}
+
+\subsection{Simple Example}
 \subsubsection*{Goal}
-We will start with a simple example to ensure we can correctly converge to some posterior.
-Alongside this, we will ensure we can calculate (and infer) posterior summary statistics,
-suitability of the model, monte-carlo standard error, and rate of convergence.
+Ensure we can converge to a known model using bayesian techniques.
 
 \subsubsection*{Methodology}
 This follows the example C.3 regarding the normals in Bayesain Data Analysis (BDA) \cite{gelman_bayesian_2014}.
 
 \begin{enumerate}
 	\item Generate bivariate normal data
-	\item Derive and make functions for the marginal distributions (assuming normal prior and conditional)
-	\item Run the posterior simulations with Gibbs Sampling
-	\item Find the parameters through the samples
-	\item Repeat for various realistic n
+	\item Derive form of marginals and implment as R functions (assuming normal prior and conditional)
+	\item Sample from posterior with Gibbs Sampler
+	\item Assess the if sampled posterior is reasonable
+	\item Retrieve the other quantites of interest 
 \end{enumerate}
 
-\subsection*{Harder Example}
+\subsection{Harder Example}
 \subsubsection*{Goal}
 Apply what was learned in the simple example to real data. We will be able to try and compare the our methodology. 
 \subsubsection*{Methodology}
@@ -81,36 +96,46 @@ This follows the bioessay expirement in example 3.7 from BDA \cite{gelman_bayesi
 
 \begin{enumerate}
 	\item Derive the full conditional, then the marginal conditionals using the distributions provided in text
-	\item Gibbs sample for the posterior
-	\item Explore the results
-	\item Repeat for various realistic n
+	\item Sample from posterior with Gibbs Sampler
+	\item Assess the if sampled posterior is reasonable
+	\item Retrieve the other quantites of interest
 \end{enumerate}
 
-\subsection*{Extend to Hierarchical Models}
-If time permits, we would use the rat tumor example (5.4) from BDA and tutorial C.3 to try to construct a bayesian hierarchical model
-using stan \cite{gelman_bayesian_2014}.
+\subsubsection*{Dataset}
+This dataset is shown in table 3.1 from the BDA text \cite{gelman_bayesian_2014}. It has been replicated below.
+
+\begin{center}
+	Bioassay data from Racine et al. (1986), copied from BDA
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ Dose, $x_i$ (log g/ml) & Number of animals, $n_i$ & Number of deaths, $y_i$ \\ 
+ \hline
+ $-0.86$ & $5$ & $0$ \\ 
+ $-0.30$ & $5$ & $1$ \\ 
+ $-0.05$ & $5$ & $3$ \\
+ $0.73$ & $5$ & $5$ \\  
+ \hline
+\end{tabular}
+\end{center}
+The data is binomially distributed.
+\subsection{Extend to Hierarchical Models}
 \subsubsection*{Goal}
-This would extend our knowledge to learn hyperparameters and Stan.
+If time permits, we would use the rat tumor example (5.4) from BDA and tutorial C.3 to try to construct a bayesian hierarchical model
+using stan \cite{gelman_bayesian_2014}, giving us opportunity to learn hyperparameters and Stan.
+\subsubsection*{Methodology}
+
 \begin{enumerate}
 	\item Create stan file, laying out parameters, model, and transformed parameters
 	\item Run some number of chains iteratively in R, which can be set to be the Gibbs method
 	\item Use Stan and R to find the posterior
+	\item Assess the if sampled posterior is reasonable
+	\item Retrieve the other quantites of interest
 \end{enumerate}
 
-\subsection*{Quantities of Interest}
-
-\begin{itemize}
-	\item Estimated mean, variance/standard deviation, credible intervals (informs us of the posterior model) \cite{gelman_bayesian_2014} 
-	\item Gelman-Rubin Statistic (Convergence Assessment) \cite{rizzo_statistical_2019}
-	\item Rate of Convergence (/Assessing with Gibbs Stopper) \cite{tanner_tools_1996}
-\end{itemize}
-
-\subsection*{Required Libraries}
-\begin{itemize}
-	\item MASS  for the bivariate normal generation (or basic R) \cite{ripley_mass_2009}
-	\item STAN for the actual MCMC/Gibs sampling – we may some examples by hand \cite{guo_rstan_2015}
-\end{itemize}
-
+\subsubsection*{Dataset}
+This dataset can be found at \citet{datasets_BDA} titled "Rat tumors". The data represents the count of rats developing tumours from various
+expirements (or samples). Y representing the number of rats developing tumors and N representing the total number of rats in the study. 
+The data is binomially distributed.
 \section*{Division of Responsibility}
 
 
