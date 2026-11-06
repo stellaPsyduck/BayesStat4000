@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex bb-ds-fellowship"] 1793930461.91505 "bb-ds-fellowship.aux" "bb-ds-fellowship.bbl" "bb-ds-fellowship" 1793930766.40993 0
-  "./bb-ds-fellowship.bib" 1793915315 9839 28e237e4c55e0e4747b8e85c27aa7d3f ""
-  "bb-ds-fellowship.aux" 1793930764 892 e1d9672e387c0665552d46fb26f97bb6 "pdflatex"
+["bibtex bb-ds-fellowship"] 1793984516.21246 "bb-ds-fellowship.aux" "bb-ds-fellowship.bbl" "bb-ds-fellowship" 1793984520.51315 0
+  "./bb-ds-fellowship.bib" 1793984291 10213 ff9da91d0d396bc91c72c53af723434b ""
+  "bb-ds-fellowship.aux" 1793984518 1129 135d5d3a6242cfe875559fe92d376d68 "pdflatex"
   "c:/texlive/2024/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1735158538 26816 ffe5423d2019860bad9f54bc402fac15 ""
   (generated)
   "bb-ds-fellowship.bbl"
   "bb-ds-fellowship.blg"
   (rewritten before read)
-["pdflatex"] 1793930762.53759 "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" "bb-ds-fellowship.pdf" "bb-ds-fellowship" 1793930766.41671 0
-  "bb-ds-fellowship.aux" 1793930764 892 e1d9672e387c0665552d46fb26f97bb6 "pdflatex"
-  "bb-ds-fellowship.bbl" 1793930698 1374 0dd223fd9b01a6a790c5a97240655784 "bibtex bb-ds-fellowship"
-  "bb-ds-fellowship.out" 1793930764 383 5fb4fd4dd539f9128dee57caa829c357 "pdflatex"
-  "bb-ds-fellowship.tex" 1793930760 3360 95ba0614d14c955313f0f0ada83d68b4 ""
-  "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" 1793930760 3360 95ba0614d14c955313f0f0ada83d68b4 ""
+["pdflatex"] 1793984517.02067 "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" "bb-ds-fellowship.pdf" "bb-ds-fellowship" 1793984520.51406 0
+  "bb-ds-fellowship.aux" 1793984518 1129 135d5d3a6242cfe875559fe92d376d68 "pdflatex"
+  "bb-ds-fellowship.bbl" 1793984516 2085 3a5bde7ded76af46fbdd58bb0f2c1335 "bibtex bb-ds-fellowship"
+  "bb-ds-fellowship.out" 1793984518 383 5fb4fd4dd539f9128dee57caa829c357 "pdflatex"
+  "bb-ds-fellowship.tex" 1793984506 3961 1e380c7dbef327893424ff49bc98923e ""
+  "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" 1793984506 3961 1e380c7dbef327893424ff49bc98923e ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1735156290 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1735157085 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1735156749 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""

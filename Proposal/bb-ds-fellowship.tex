@@ -77,24 +77,32 @@ This follows the example C.3 regarding the normals in Bayesain Data Analysis (BD
 \subsubsection*{Goal}
 Apply what was learned in the simple example to real data. We will be able to try and compare the our methodology. 
 \subsubsection*{Methodology}
-This follows the 1.6 example in BDA \cite{gelman_bayesian_2014} but we turn it computational. 
+This follows the bioessay expirement in example 3.7 from BDA \cite{gelman_bayesian_2014}. 
 
-\begin{itemize}
+\begin{enumerate}
 	\item Derive the full conditional, then the marginal conditionals using the distributions provided in text
 	\item Gibbs sample for the posterior
 	\item Explore the results
 	\item Repeat for various realistic n
-\end{itemize}
+\end{enumerate}
 
 \subsection*{Extend to Hierarchical Models}
-
+If time permits, we would use the rat tumor example (5.4) from BDA and tutorial C.3 to try to construct a bayesian hierarchical model
+using stan \cite{gelman_bayesian_2014}.
+\subsubsection*{Goal}
+This would extend our knowledge to learn hyperparameters and Stan.
+\begin{enumerate}
+	\item Create stan file, laying out parameters, model, and transformed parameters
+	\item Run some number of chains iteratively in R, which can be set to be the Gibbs method
+	\item Use Stan and R to find the posterior
+\end{enumerate}
 
 \subsection*{Quantities of Interest}
 
 \begin{itemize}
-	\item Estimated mean, variance/standard deviation, credible intervals (informs us of the posterior model)
-	\item Gelman-Rubin Statistic (Convergence Assessment) 
-	\item Rate of Convergence (computational efficiency)
+	\item Estimated mean, variance/standard deviation, credible intervals (informs us of the posterior model) \cite{gelman_bayesian_2014} 
+	\item Gelman-Rubin Statistic (Convergence Assessment) \cite{rizzo_statistical_2019}
+	\item Rate of Convergence (/Assessing with Gibbs Stopper) \cite{tanner_tools_1996}
 \end{itemize}
 
 \subsection*{Required Libraries}

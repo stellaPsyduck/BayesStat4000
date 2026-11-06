@@ -1,4 +1,4 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{5}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -22,5 +22,19 @@ Brian Ripley and Bill Venables.
 \newblock {MASS}: {Support} {Functions} and {Datasets} for {Venables} and {Ripley}'s {MASS}, May 2009.
 \newblock URL \url{https://CRAN.R-project.org/package=MASS}.
 \newblock Institution: Comprehensive R Archive Network Pages: 7.3-66.
+
+\bibitem[Rizzo(2019)]{rizzo_statistical_2019}
+Maria~L. Rizzo.
+\newblock \emph{Statistical computing with {R}}.
+\newblock CRC Press, Taylor \& Francis Group, Boca Raton, second edition edition, 2019.
+\newblock ISBN 978-1-4665-5332-3 978-1-4665-5333-0.
+
+\bibitem[Tanner(1996)]{tanner_tools_1996}
+Martin~A. Tanner.
+\newblock \emph{Tools for {Statistical} {Inference}: {Methods} for the {Exploration} of {Posterior} {Distributions} and {Likelihood} {Functions}}.
+\newblock Springer {Series} in {Statistics}. Springer New York, New York, NY, 1996.
+\newblock ISBN 978-1-4612-8471-0 978-1-4612-4024-2.
+\newblock \doi{10.1007/978-1-4612-4024-2}.
+\newblock URL \url{http://link.springer.com/10.1007/978-1-4612-4024-2}.
 
 \end{thebibliography}

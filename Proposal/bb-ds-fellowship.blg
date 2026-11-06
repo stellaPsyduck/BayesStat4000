@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: bb-ds-fellowship.aux
 The style file: plainnat.bst
 Database file #1: bb-ds-fellowship.bib
-You've used 3 entries,
+You've used 5 entries,
             2773 wiz_defined-function locations,
-            614 strings with 5660 characters,
-and the built_in function-call counts, 1573 in all, are:
-= -- 128
-> -- 135
-< -- 1
-+ -- 45
-- -- 42
-* -- 138
-:= -- 259
-add.period$ -- 13
-call.type$ -- 3
-change.case$ -- 23
-chr.to.int$ -- 3
-cite$ -- 6
-duplicate$ -- 52
-empty$ -- 99
-format.name$ -- 47
-if$ -- 316
+            630 strings with 6118 characters,
+and the built_in function-call counts, 2239 in all, are:
+= -- 192
+> -- 155
+< -- 3
++ -- 53
+- -- 48
+* -- 179
+:= -- 373
+add.period$ -- 24
+call.type$ -- 5
+change.case$ -- 30
+chr.to.int$ -- 5
+cite$ -- 10
+duplicate$ -- 92
+empty$ -- 163
+format.name$ -- 55
+if$ -- 458
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 2
-newline$ -- 26
-num.names$ -- 12
-pop$ -- 50
+missing$ -- 6
+newline$ -- 40
+num.names$ -- 20
+pop$ -- 65
 preamble$ -- 1
-purify$ -- 20
+purify$ -- 26
 quote$ -- 0
-skip$ -- 50
+skip$ -- 74
 stack$ -- 0
-substring$ -- 6
-swap$ -- 5
+substring$ -- 10
+swap$ -- 7
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 28
+type$ -- 40
 warning$ -- 0
-while$ -- 9
+while$ -- 15
 width$ -- 0
-write$ -- 52
+write$ -- 88
