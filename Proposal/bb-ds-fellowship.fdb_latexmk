@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex bb-ds-fellowship"] 1794008073.27762 "bb-ds-fellowship.aux" "bb-ds-fellowship.bbl" "bb-ds-fellowship" 1794008077.80126 0
+["bibtex bb-ds-fellowship"] 1794008073.27762 "bb-ds-fellowship.aux" "bb-ds-fellowship.bbl" "bb-ds-fellowship" 1794008180.61846 0
   "./bb-ds-fellowship.bib" 1793986672 10440 dace080954fd554dfea5c9ec70f92864 ""
-  "bb-ds-fellowship.aux" 1794008075 2380 ddf105b7f987cba6716f10075cedee30 "pdflatex"
+  "bb-ds-fellowship.aux" 1794008178 2380 ddf105b7f987cba6716f10075cedee30 "pdflatex"
   "c:/texlive/2024/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1735158538 26816 ffe5423d2019860bad9f54bc402fac15 ""
   (generated)
   "bb-ds-fellowship.bbl"
   "bb-ds-fellowship.blg"
   (rewritten before read)
-["pdflatex"] 1794008074.09292 "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" "bb-ds-fellowship.pdf" "bb-ds-fellowship" 1794008077.80295 0
-  "bb-ds-fellowship.aux" 1794008075 2380 ddf105b7f987cba6716f10075cedee30 "pdflatex"
+["pdflatex"] 1794008176.71853 "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" "bb-ds-fellowship.pdf" "bb-ds-fellowship" 1794008180.61977 0
+  "bb-ds-fellowship.aux" 1794008178 2380 ddf105b7f987cba6716f10075cedee30 "pdflatex"
   "bb-ds-fellowship.bbl" 1794008074 2794 c6cfb32ebac6a1488e66c19c7c1e6b0c "bibtex bb-ds-fellowship"
-  "bb-ds-fellowship.out" 1794008075 1626 8d75d99e57e1d8a010092be611a716f1 "pdflatex"
-  "bb-ds-fellowship.tex" 1794008067 12190 370c13807c9cc5d3cc0b1362f0a7b717 ""
-  "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" 1794008067 12190 370c13807c9cc5d3cc0b1362f0a7b717 ""
+  "bb-ds-fellowship.out" 1794008178 1626 8d75d99e57e1d8a010092be611a716f1 "pdflatex"
+  "bb-ds-fellowship.tex" 1794008175 12120 4c657f109a650ba13b50238f5f7792fe ""
+  "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" 1794008175 12120 4c657f109a650ba13b50238f5f7792fe ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1735156290 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1735157085 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1735156749 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""

@@ -74,7 +74,6 @@ Many of our sources are in the in-text citaitons. \\
 		\item Evaluate the Fit of the Posterior
 	\end{enumerate}
   \item Renard Paper \citet{renard_application_2006} \\
-  
 We can use Bayesian inference in order to assess the suitability of a proposed model for a dynamic system. 
 $$
 P(M_j|X) = \frac{P(X|M_j)\pi(M_j)}{\sum_{i=1}^{q}P(M_i|X)\pi(M_i)}
@@ -90,9 +89,7 @@ $$
 Where the usage of model $M_i$ is supported by high values of $B_{i,j}$. \\
 In this application, the Markov chain is comprised of iteratively selecting different parameters (denoted as $\theta^\tau$ where $\tau$ is the $\tau'\text{th}$ vector of parameters generated).
 To quantify the convergence of an mcmc model across different starting points, we can use the Gelman-Rubin statistic.  The statistic is a measurement of variability between chains, and is further 
-
 \end{itemize}
-
 \section{Computational Strategy}
 The quantities of interest are mentioned in the project overview.
 \subsection{Required Libraries}
@@ -100,7 +97,6 @@ The quantities of interest are mentioned in the project overview.
 	\item MASS  for the bivariate normal generation \cite{ripley_mass_2009}
 	\item STAN for the actual MCMC/Gibs sampling – we may some examples by hand \cite{guo_rstan_2015}
 \end{itemize}
-
 \subsection{Simple Example}
 \textit{Goal: }Ensure we can converge to a known model using bayesian techniques.
 
@@ -142,11 +138,6 @@ This dataset can be found at \citet{datasets_BDA} titled "Rat tumors". The data 
 expirements (or samples). Y representing the number of rats developing tumors and N representing the total number of rats in the study. 
 The data is binomially distributed.
 \section*{Division of Responsibility}
-
-
-\section*{Timeline}
-\section*{Division of Responsibility}
-
 \subsection*{Report contributions}
 \begingroup
 \small
@@ -161,10 +152,8 @@ Brenden & Real-world applications and uses of the workflow in hierarchical model
 \end{tabularx}
 \par
 \endgroup
-
 \subsection*{Presentation topics}
 These are speaking assignments; preparation may be shared.
-
 \medskip
 \begingroup
 \small
@@ -235,7 +224,6 @@ To be set & \textbf{All:} Have the report near completion and ready for editing.
 \end{tabularx}
 \par
 \endgroup
-
 \section*{Expected Outcomes}
 
 We would expect our model to be able to approximately sample from the wanted distribution through mcmc methods, 
