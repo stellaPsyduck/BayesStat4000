@@ -1,8 +1,26 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Ripley and Venables, 2009]{ripley_mass_2009}
-Ripley, B. and Venables, B. (2009).
-\newblock {MASS}: {Support} {Functions} and {Datasets} for {Venables} and {Ripley}'s {MASS}.
+\bibitem[Gelman et~al.(2014)Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin]{gelman_bayesian_2014}
+Andrew Gelman, John~B. Carlin, Hal~S. Stern, David~B. Dunson, Aki Vehtari, and Donald~B. Rubin.
+\newblock \emph{Bayesian data analysis}.
+\newblock Texts in statistical science. CRC Press, Taylor \& Francis Group, Boca Raton, third edition edition, 2014.
+\newblock ISBN 978-1-4398-4095-5 978-1-4398-9820-8.
+
+\bibitem[Guo et~al.(2015)Guo, Gabry, Goodrich, Johnson, Weber, and Badr]{guo_rstan_2015}
+Jiqiang Guo, Jonah Gabry, Ben Goodrich, Andrew Johnson, Sebastian Weber, and Hamada~S. Badr.
+\newblock rstan: {R} {Interface} to {Stan}, July 2015.
+\newblock URL \url{https://CRAN.R-project.org/package=rstan}.
+\newblock Institution: Comprehensive R Archive Network Pages: 2.32.7.
+
+\bibitem[Ripley and Venables(2009)]{ripley_mass_2009}
+Brian Ripley and Bill Venables.
+\newblock {MASS}: {Support} {Functions} and {Datasets} for {Venables} and {Ripley}'s {MASS}, May 2009.
+\newblock URL \url{https://CRAN.R-project.org/package=MASS}.
 \newblock Institution: Comprehensive R Archive Network Pages: 7.3-66.
 
 \end{thebibliography}

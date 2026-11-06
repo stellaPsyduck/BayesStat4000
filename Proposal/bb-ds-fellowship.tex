@@ -17,6 +17,9 @@
 \addtolength{\textfloatsep}{-5mm}
 \setlength\columnsep{20pt}
 
+\bibliographystyle{plainnat}
+\setcitestyle{numbers,square}
+
 \usepackage[a4paper,left=1.50cm, right=1.50cm, top=1.50cm, bottom=1.50cm]{geometry}
 
 
@@ -50,17 +53,58 @@
 \item bleh \cite{ripley_mass_2009} 
 \end{itemize}
 
-\subsection*{Background and Literature}
+\subsection{Background and Literature}
 
-\section*{Proposed Computational Strategy}
+\section{Proposed Computational Strategy}
 \subsection*{Simple Example}
 \subsubsection*{Goal}
 We will start with a simple example to ensure we can correctly converge to some posterior.
 Alongside this, we will ensure we can calculate (and infer) posterior summary statistics,
 suitability of the model, monte-carlo standard error, and rate of convergence.
+
 \subsubsection*{Methodology}
+This follows the example C.3 regarding the normals in Bayesain Data Analysis (BDA) \cite{gelman_bayesian_2014}.
+
+\begin{enumerate}
+	\item Generate bivariate normal data
+	\item Derive and make functions for the marginal distributions (assuming normal prior and conditional)
+	\item Run the posterior simulations with Gibbs Sampling
+	\item Find the parameters through the samples
+	\item Repeat for various realistic n
+\end{enumerate}
+
+\subsection*{Harder Example}
+\subsubsection*{Goal}
+Apply what was learned in the simple example to real data. We will be able to try and compare the our methodology. 
+\subsubsection*{Methodology}
+This follows the 1.6 example in BDA \cite{gelman_bayesian_2014} but we turn it computational. 
+
+\begin{itemize}
+	\item Derive the full conditional, then the marginal conditionals using the distributions provided in text
+	\item Gibbs sample for the posterior
+	\item Explore the results
+	\item Repeat for various realistic n
+\end{itemize}
+
+\subsection*{Extend to Hierarchical Models}
+
+
+\subsection*{Quantities of Interest}
+
+\begin{itemize}
+	\item Estimated mean, variance/standard deviation, credible intervals (informs us of the posterior model)
+	\item Gelman-Rubin Statistic (Convergence Assessment) 
+	\item Rate of Convergence (computational efficiency)
+\end{itemize}
+
+\subsection*{Required Libraries}
+\begin{itemize}
+	\item MASS  for the bivariate normal generation (or basic R) \cite{ripley_mass_2009}
+	\item STAN for the actual MCMC/Gibs sampling – we may some examples by hand \cite{guo_rstan_2015}
+\end{itemize}
 
 \section*{Division of Responsibility}
+
 
 \section*{Timeline}
 
@@ -72,6 +116,5 @@ bleh
 % \end{multicols*}{2}
 
 \bibliography{bb-ds-fellowship}
-\bibliographystyle{apalike}
 	
 \end{document}
