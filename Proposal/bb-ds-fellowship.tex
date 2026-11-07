@@ -47,7 +47,7 @@
 \begin{multicols*}{2}
  
 \section{Project Overview} 
-Our group will focus on understanding, briefly explaining, and producing
+Our group will focus on understanding, briefly explaining, and writing
 a short report on Bayesian estimation. The framework assumes that parameters
 of interest are random with probability distributions that describe their
 uncertainty conditional on the observed dataset \cite{rizzo_statistical_2019}.
@@ -80,7 +80,7 @@ We will assess the means, variances, and credible intervals of posterior distrib
 sample size influence our results. Then, find the maximum a posteriori \cite{tsun_maximum_nodate} \cite{rizzo_statistical_2019}. 
 \subsubsection*{Assessing the Convergence}
 We will also investigate the convergence of our estimated posteriors using three
-methods: the Gelman-Rubin statistic $\sqrt{\hat{R}}$ \cite{renard_application_2006} \cite{rizzo_statistical_2019}, the gibbs stopper method \cite{tanner_tools_1996}, burn-in range \cite{geyer_mcmcburn_nodate}, and test multiple initializations.
+methods: the Gelman-Rubin statistic $\sqrt{\hat{R}}$ \cite{renard_application_2006} \cite{rizzo_statistical_2019}, the gibbs stopper method \cite{tanner_tools_1996}, burn-in range \cite{cook_mcmc_2016}, and test multiple initializations.
 \section{Background and Literature}
 Many of our sources are in the in-text citaitons and mentioned in the bibliography. \\
 \begin{itemize}[nosep]
@@ -92,8 +92,8 @@ Many of our sources are in the in-text citaitons and mentioned in the bibliograp
 		\item Condition on the observed data by getting the posterior, or find the conditional probability of the unobserved quantities of the dataset
 		\item Evaluate the fit of the posterior
 	\end{enumerate}
-  \item Renard Paper \citet{renard_application_2006} \\
-We can use Bayesian inference in order to assess the suitability of a proposed model for a dynamic system,
+  \item An application of Bayesian analysis and Markov chain Monte Carlo methods to the estimation of a regional trend in annual maxima. \citet{renard_application_2006} \\
+We can use Bayesian inference in order to assess the suitability of a proposed model,
 $$
 P(M_j|X) = \frac{P(X|M_j)\pi(M_j)}{\sum_{i=1}^{q}P(X|M_i)\pi(M_i)}
 $$
@@ -173,7 +173,7 @@ Brenden & Real-world applications and uses of the workflow in hierarchical model
 \endgroup
 \subsection*{Presentation topics}
 These are speaking assignments; preparation may be shared.
-\medskip
+
 \begingroup
 \small
 \setlength{\tabcolsep}{4pt}
@@ -245,9 +245,9 @@ To be set & \textbf{All:} Have the report near completion and ready for editing.
 \endgroup
 \section*{Expected Outcomes}
 
-We would expect our model to be able to approximately sample from the wanted distribution through MCMC methods, 
+We  expect our model to be able to approximately sample from the desired distribution through MCMC methods, 
 and be able to estimate the model parameters for further analysis.
-We would expect to be able to find quantities of interest using our simulation.
+We further expect to be able to approximate the parameters of interest using our simulation.
 Depending on how much time we have, we may or may not pursue learning about and implementing a hierarchical model.
 While we do not necessarily intend to focus much if at all on them in the presentation, they are a valuable tool to be aware of and know how to implement.
 
