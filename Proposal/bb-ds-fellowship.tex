@@ -47,23 +47,42 @@
 \begin{multicols*}{2}
  
 \section{Project Overview} 
-Our group will focus on understanding, briefly explaining, and producing a short report on Bayesian estimation. The framework assumes that parameters of interest are random with probability distributions that describe their uncertainty conditional on the observed dataset. It also treats the dataset as fixed, unlike a frequentist framework where the parameters are fixed, and the data is assumed to be random and a result of repeated sampling from a larger population.
+Our group will focus on understanding, briefly explaining, and producing
+a short report on Bayesian estimation. The framework assumes that parameters
+of interest are random with probability distributions that describe their
+uncertainty conditional on the observed dataset \cite{rizzo_statistical_2019}.
+It also treats the dataset as fixed, unlike a frequentist framework where the
+parameters are fixed, and the data is assumed to be random and a result of
+repeated sampling from a larger population.
 
-The computational method of choice for Bayesian estimation is the Gibbs sampling method, which is a part of the Markov Chain Monte Carlo family. MCMC acts as the engine for Bayestan estimation, since it’s not always possible to mathematically calculate the posterior distribution. Gibbs sampling is useful when the joint probability distribution P(X, Y ) is difficult to sample from directly, but sampling from the conditional distributions, $P(X|Y )$ and $P(Y |X)$ is feasible. We will start with a simple normal model that has known theoretical properties, and we want to see if our computational sampling method is approaching the expected distribution; in a sense, we’re looking to see if the history of the random walk traces out the probability distribution of interest. We then plan to explore more advanced models. 
+Our computational method of choice for Bayesian estimation is the Gibbs
+sampling method, which is a part of the Markov Chain Monte Carlo family.
+MCMC acts as the engine for Bayesian estimation, since it’s not always possible
+to mathematically calculate the posterior distribution. Gibbs sampling is
+useful when the joint probability distribution $P(X, Y )$ is difficult to
+sample from directly, but sampling from the conditional distributions, $P(X|Y )$
+and $P(Y |X)$ is feasible \cite{noauthor_gibbs_nodate}. We will start with a simple normal model that has known
+theoretical properties, and we want to see if our computational sampling method
+is approaching the expected distribution; in a sense, we’re looking to see if 
+the history of the random walk traces out the probability distribution of 
+interest. We then plan to explore more advanced models. 
 
-The spirit of the project is to quantify how accurately these computational methods help us converge the posterior.\subsection*{Objectives}
-\subsubsection{Simulation Study}
-We start of with a straightforward example using a normal model and we see how our simulation results compare to
+The spirit of the project is to quantify how accurately these computational 
+methods help us converge the posterior.
+
+\subsection*{Objectives}
+\subsubsection*{Simulation Study}
+We start off with a straightforward example using a normal model and we see how our simulation results compare to
 the theoretical results. After establishing the basic framework we extend the application to real data, then we explore
 how we can extend the methodology for hierarchical models.
-\subsubsection{Evaluating the Posterior}
-We will assess the means, variances, and credible intervals of posterior means. Discuss how simulation error and
-sample size influence our results. Then, find the maximum a priori. 
-\subsubsection{Assessing the Convergence}
+\subsubsection*{Evaluating the Posterior}
+We will assess the means, variances, and credible intervals of posterior distributions \cite{gelman_bayesian_2014}. Discuss how simulation error and
+sample size influence our results. Then, find the maximum a posteriori \cite{tsun_maximum_nodate} \cite{rizzo_statistical_2019}. 
+\subsubsection*{Assessing the Convergence}
 We will also investigate the convergence of our estimated posteriors using three
-methods: the Gelman-Rubin statistic $\sqrt{\hat{R}}$ \cite{renard_application_2006} \cite{rizzo_statistical_2019}, the gibbs stopper method \cite{tanner_tools_1996}, burn-in range, and random initialization.
+methods: the Gelman-Rubin statistic $\sqrt{\hat{R}}$ \cite{renard_application_2006} \cite{rizzo_statistical_2019}, the gibbs stopper method \cite{tanner_tools_1996}, burn-in range \cite{geyer_mcmcburn_nodate}, and test multiple initializations.
 \section{Background and Literature}
-Many of our sources are in the in-text citaitons. \\
+Many of our sources are in the in-text citaitons and mentioned in the bibliography. \\
 \begin{itemize}[nosep]
  \item Bayesian Data Analysis, \citet{gelman_bayesian_2014} \\
 	This is the main source for the examples and tutorials we are following.
@@ -71,49 +90,49 @@ Many of our sources are in the in-text citaitons. \\
 	\begin{enumerate}[nosep]
 		\item Set up the full probability model by getting the joint distribution
 		\item Condition on the observed data by getting the posterior, or find the conditional probability of the unobserved quantities of the dataset
-		\item Evaluate the Fit of the Posterior
+		\item Evaluate the fit of the posterior
 	\end{enumerate}
   \item Renard Paper \citet{renard_application_2006} \\
-We can use Bayesian inference in order to assess the suitability of a proposed model for a dynamic system. 
+We can use Bayesian inference in order to assess the suitability of a proposed model for a dynamic system,
 $$
-P(M_j|X) = \frac{P(X|M_j)\pi(M_j)}{\sum_{i=1}^{q}P(M_i|X)\pi(M_i)}
+P(M_j|X) = \frac{P(X|M_j)\pi(M_j)}{\sum_{i=1}^{q}P(X|M_i)\pi(M_i)}
 $$
-Where $M_k$ is the kth proposed model, q is the number of models we propose, and $\pi(M_k)$ is the probability of using model $M_k$.  It is important to note that $M_i$ and $M_j$ are not neccessarily of different distributions, but perhaps different parameters chosen for the same distribution.
-$P(X|M) = \int P(X,\theta|M)d\theta$ is extremely difficult to solve numerically for high dimensions.  However, it acts as a normalizing factor and we can instead sample $P(X|M_j)\pi(M_j)$ using MCMC methods.  We can aestimate the normalizing factor via the eCDF, as without doing so would cause our samples to be improperly scaled. \\
+where $M_k$ is the kth proposed model, q is the number of models we propose, and $\pi(M_k)$ is the probability of using model $M_k$.  It is important to note that $M_i$ and $M_j$ are not neccessarily of different distributions, but perhaps different parameters chosen for the same distribution.
+$P(X|M) = \int P(X,\theta|M)d\theta$ is extremely difficult to solve numerically for high dimensions.  However, it acts as a normalizing factor and we can instead sample $P(X|M_j)\pi(M_j)$ using MCMC methods.  We can estimate the normalizing factor via the eCDF, as without doing so would cause our samples to be improperly scaled. \\
 Comparing between models can be done via Bayes factors, where we compare the ith and jth model using:
 $$
 \begin{aligned}
 B_{i,j} = \frac{P(X|M_i)}{P(X|M_j)}
 \end{aligned}
 $$
-Where the usage of model $M_i$ is supported by high values of $B_{i,j}$. \\
+where the usage of model $M_i$ is supported by high values of $B_{i,j}$. \\
 In this application, the Markov chain is comprised of iteratively selecting different parameters (denoted as $\theta^\tau$ where $\tau$ is the $\tau'\text{th}$ vector of parameters generated).
-To quantify the convergence of an mcmc model across different starting points, we can use the Gelman-Rubin statistic.  The statistic is a measurement of variability between chains, and is further 
+To quantify the convergence of an MCMC model across different starting points, we can use the Gelman-Rubin statistic.  The statistic is a measurement of variability between chains, and is further 
 \end{itemize}
 \section{Computational Strategy}
 The quantities of interest are mentioned in the project overview.
 \subsection{Required Libraries}
 \begin{itemize}[nosep]
 	\item MASS  for the bivariate normal generation \cite{ripley_mass_2009}
-	\item STAN for the actual MCMC/Gibs sampling – we may some examples by hand \cite{guo_rstan_2015}
+	\item Stan for the hierarchical models (if time permits) \cite{guo_rstan_2015}
 \end{itemize}
 \subsection{Simple Example}
-\textit{Goal: }Ensure we can converge to a known model using bayesian techniques.
+\textit{Goal: }Ensure we can converge to a known model using Bayesian techniques.
 
 \noindent\textit{Methodology: } This follows the example C.3 regarding the normals in Bayesain Data Analysis (BDA) \cite{gelman_bayesian_2014}.
 \begin{enumerate}[nosep]
 	\item Generate bivariate normal data
-	\item Derive form of marginals and implment as R functions (assuming normal prior and conditional)
+	\item Derive form of conditionals from the joint and implement as R functions
 	\item Sample from posterior with Gibbs Sampler
 	\item Assess the if sampled posterior is reasonable
 	\item Retrieve the other quantites of interest 
 \end{enumerate}
 \subsection{Harder Example}
-\textit{Goal: }Apply what was learned in the simple example to real data. We will be able to try and compare the our methodology. 
+\textit{Goal: }Apply what was learned in the simple example to real data.
 
-\noindent\textit{Methodology: }This follows the bioessay expirement in example 3.7 from BDA \cite{gelman_bayesian_2014}. 
+\noindent\textit{Methodology: }This follows the bioassay expirement in example 3.7 from BDA \cite{gelman_bayesian_2014}. 
 \begin{enumerate}[nosep]
-	\item Derive the full conditional, then the marginal conditionals using the distributions provided in text
+	\item Derive the full conditional, then the conditionals using the distributions provided in text
 	\item Sample from posterior with Gibbs Sampler
 	\item Assess the if sampled posterior is reasonable
 	\item Retrieve the other quantites of interest
@@ -123,14 +142,13 @@ This dataset is shown in table 3.1 from the BDA text \cite{gelman_bayesian_2014}
 The data is binomially distributed.
 \subsection{Extension: Hierarchical Models}
 \textit{Goal: }
-If time permits, we would use the rat tumor example (5.4) from BDA and tutorial C.3 to try to construct a bayesian hierarchical model
+If time permits, we would use the rat tumor example (5.4) from BDA and tutorial C.3 to try to construct a Bayesian hierarchical model
 using stan \cite{gelman_bayesian_2014}, giving us opportunity to learn hyperparameters and Stan.
 
 \noindent\textit{Methodology: }
 \begin{enumerate}[nosep]
 	\item Create stan file, laying out parameters, model, and transformed parameters
 	\item Run some number of chains iteratively in R, which can be set to be the Gibbs method
-	\item Use Stan and R to find the posterior
 	\item Assess the if sampled posterior is reasonable
 	\item Retrieve the other quantites of interest
 \end{enumerate}
@@ -227,15 +245,15 @@ To be set & \textbf{All:} Have the report near completion and ready for editing.
 \endgroup
 \section*{Expected Outcomes}
 
-We would expect our model to be able to approximately sample from the wanted distribution through mcmc methods, 
+We would expect our model to be able to approximately sample from the wanted distribution through MCMC methods, 
 and be able to estimate the model parameters for further analysis.
 We would expect to be able to find quantities of interest using our simulation.
 Depending on how much time we have, we may or may not pursue learning about and implementing a hierarchical model.
-While we do not necessarily intend to focus much if at all on them in the presentation, they are a valuable tool to be aware of and know hwo to implement.
+While we do not necessarily intend to focus much if at all on them in the presentation, they are a valuable tool to be aware of and know how to implement.
 
 
 \end{multicols*}
 
-\bibliography*{bb-ds-fellowship}
+\bibliography{bb-ds-fellowship}
 	
 \end{document}

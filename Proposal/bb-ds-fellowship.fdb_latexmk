@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex bb-ds-fellowship"] 1794008073.27762 "bb-ds-fellowship.aux" "bb-ds-fellowship.bbl" "bb-ds-fellowship" 1794008420.71354 0
-  "*.bib" 0 -1 0 ""
-  "bb-ds-fellowship.aux" 1794008280 2380 ddf105b7f987cba6716f10075cedee30 "pdflatex"
+["bibtex bb-ds-fellowship"] 1794013698.90793 "bb-ds-fellowship.aux" "bb-ds-fellowship.bbl" "bb-ds-fellowship" 1794016563.48663 0
+  "./bb-ds-fellowship.bib" 1794013254 10974 172857f20f927aa1b35723edb4bd518f ""
+  "bb-ds-fellowship.aux" 1794016561 2311 6996a4c9a0282beb07959d90b8358411 "pdflatex"
   "c:/texlive/2024/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1735158538 26816 ffe5423d2019860bad9f54bc402fac15 ""
   (generated)
   "bb-ds-fellowship.bbl"
   "bb-ds-fellowship.blg"
   (rewritten before read)
-["pdflatex"] 1794008416.75024 "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" "bb-ds-fellowship.pdf" "bb-ds-fellowship" 1794008420.7149 0
-  "bb-ds-fellowship.aux" 1794008418 2365 024164b2cc9d1b0937801ac69a5550d5 "pdflatex"
-  "bb-ds-fellowship.bbl" 1794008074 2794 c6cfb32ebac6a1488e66c19c7c1e6b0c "bibtex bb-ds-fellowship"
-  "bb-ds-fellowship.out" 1794008418 1626 8d75d99e57e1d8a010092be611a716f1 "pdflatex"
-  "bb-ds-fellowship.tex" 1794008415 12119 d22d2073a560ebf54672a28d3a7a07b5 ""
-  "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" 1794008415 12119 d22d2073a560ebf54672a28d3a7a07b5 ""
+["pdflatex"] 1794016559.45489 "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" "bb-ds-fellowship.pdf" "bb-ds-fellowship" 1794016563.4875 0
+  "bb-ds-fellowship.aux" 1794016561 2311 6996a4c9a0282beb07959d90b8358411 "pdflatex"
+  "bb-ds-fellowship.bbl" 1794013700 3342 a3b70f5d1143faf52479809a773dfa80 "bibtex bb-ds-fellowship"
+  "bb-ds-fellowship.out" 1794016561 1079 4e4ced880050cf9d8398c5adb2fca477 "pdflatex"
+  "bb-ds-fellowship.tex" 1794016558 12202 8322f33ddfe013a7b0e65bb796909b4a ""
+  "c:/Users/human/Documents/F26/STAT4000/BayesStat4000/Proposal/bb-ds-fellowship.tex" 1794016558 12202 8322f33ddfe013a7b0e65bb796909b4a ""
   "c:/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1735156290 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "c:/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1735157085 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1735156749 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""

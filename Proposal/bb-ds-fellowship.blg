@@ -3,44 +3,50 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: bb-ds-fellowship.aux
 The style file: plainnat.bst
 Database file #1: bb-ds-fellowship.bib
-You've used 7 entries,
+Warning--empty year in noauthor_gibbs_nodate
+Warning--empty year in geyer_mcmcburn_nodate
+Warning--empty publisher in tsun_maximum_nodate
+Warning--empty year in tsun_maximum_nodate
+Warning--empty year in tsun_maximum_nodate
+You've used 10 entries,
             2773 wiz_defined-function locations,
-            647 strings with 6598 characters,
-and the built_in function-call counts, 3117 in all, are:
-= -- 274
-> -- 195
-< -- 4
-+ -- 67
-- -- 60
-* -- 253
-:= -- 508
-add.period$ -- 33
-call.type$ -- 7
-change.case$ -- 40
-chr.to.int$ -- 7
-cite$ -- 14
-duplicate$ -- 128
-empty$ -- 241
-format.name$ -- 69
-if$ -- 643
+            660 strings with 6959 characters,
+and the built_in function-call counts, 4065 in all, are:
+= -- 354
+> -- 225
+< -- 7
++ -- 79
+- -- 69
+* -- 307
+:= -- 649
+add.period$ -- 43
+call.type$ -- 10
+change.case$ -- 52
+chr.to.int$ -- 10
+cite$ -- 25
+duplicate$ -- 182
+empty$ -- 345
+format.name$ -- 81
+if$ -- 845
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 7
-newline$ -- 53
-num.names$ -- 28
-pop$ -- 84
+missing$ -- 8
+newline$ -- 69
+num.names$ -- 40
+pop$ -- 127
 preamble$ -- 1
-purify$ -- 34
+purify$ -- 43
 quote$ -- 0
-skip$ -- 102
+skip$ -- 138
 stack$ -- 0
-substring$ -- 50
-swap$ -- 10
+substring$ -- 56
+swap$ -- 13
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 62
-warning$ -- 0
-while$ -- 22
+type$ -- 95
+warning$ -- 5
+while$ -- 31
 width$ -- 0
-write$ -- 119
+write$ -- 154
+(There were 5 warnings)
