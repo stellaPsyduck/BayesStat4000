@@ -79,7 +79,7 @@ ggplot(df_samples, aes(x = X1, y = X2)) +
 # trace_data <- as.data.frame(samples[seq.int(500 + 1, runs), , drop = FALSE])
 # trace_data$iteration <- seq_len(500) # will have to explore this more
 trace_data <- as.data.frame(samples)
-trace_data$iteration <- seq_len(100)
+trace_data$iteration <- seq_len(runs)
 
 trace_data <- pivot_longer(
   trace_data,

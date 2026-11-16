@@ -1,0 +1,238 @@
+---
+title: "Simplest Example - 1D Parameter Search"
+output: html_notebook
+---
+
+# Observed Data
+
+We will generate normal data and try and pretend it's from some unknown population. Our goal is to use Bayesian estimation to find the true $\sigma^2$ and $\mu$. 
+
+```{r generating_normal, echo=FALSE}
+library(ggplot2)
+set.seed(68)
+
+n_obs <- 20
+true_mu <- 0
+true_sigma_sqr <- 1
+
+obs <- rnorm(n_obs, mean=true_mu, sd=sqrt(true_sigma_sqr))
+hist(obs, probability = TRUE,
+     xlab = "Observed value", main = "Simulated Observed Data",
+     ylab = "Frequency")
+
+
+```
+At this point we know that this data is following a normal distribution, but we just don't know the true mean and variance. 
+
+# Choosing Priors
+
+We will choose uninformative priors for both our parameters. An uninformative prior is one that has little effect or weight on the out come of our Bayesian model. It's a bold choice in real world scenarios but for our example it will simplify the math, allowing one to focus on understanding the methodology.
+
+$$
+\begin{align*}
+\sigma^2 \sim &\text{Uniform}[0,1] \\
+\mu \sim &\text{Uniform}[0,1] \\
+&P(\sigma^2) = 1 \\
+&P(\mu) = 1
+\end{align*}
+$$
+Again, choosing such a uniform range for $\sigma^2$ is very unrealistic (since it's highly unlikely your variance will ever equal zero), but it simplifies steps later on.
+
+
+# Preparing for Gibbs Sampling
+
+To actually perform Gibbs sampling, we need all the conditionals for our unknowns that are pulled from the joint distribution of the proportional.
+
+$$
+\begin{align*}
+\underbrace{P(\vec{\theta}| \vec{X})}_{\text{Posterior}} &\propto \underbrace{P(\vec{X}|\vec{\theta})}_{Likelihood} \underbrace{P(\vec{\theta})}_{Priors}\\
+\Rightarrow P(\vec{\theta}|\vec{X}) &\propto \underbrace{P(\vec{X}, \vec{\theta})}_{Joint}
+\end{align*} 
+$$
+
+## Finding the Joint
+
+First let's find the priors.
+
+$$
+\begin{align*}
+P(\vec{\theta}) &= P(\mu, \sigma^2) \\
+&= P(\mu)P(\sigma^2) \text{   because i.i.d.}\\
+&= 1 
+\end{align*}
+$$
+We also know the pdf of the likelihood, since we are assuming the observed data is normally distributed.
+
+$$
+\begin{align*}
+P(\vec{X}|\vec{\theta}) &= P(X_1, X_2,\ldots,X_n| \mu, \sigma^2) \\
+&= \prod^n_{i=1}P(X_i | \mu, \sigma^2) \\
+&= \prod^n_{i=1} \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}} \\
+&=(\frac{1}{2\pi\sigma^2})^n \prod^n_{i=1} e^{-\frac{(x_i-\mu)^2}{2\sigma^2}} \\
+&= \underbrace{{2\pi}^{-\frac{n}{2}}}_{\text{Constant}} (\sigma^2)^{-\frac{n}{2}} \underbrace{e^{-\frac{\sum_{i=1}^{n} (x_i-\mu)^2}{2\sigma^2}}}_{\text{Power Rules}} \\
+&\propto (\sigma^2)^{-\frac{n}{2}} e^{-\frac{\sum_{i=1}^{n} (x_i-\mu)^2}{2\sigma^2}}
+\end{align*}
+$$
+
+Putting this all together we have:
+
+$$
+\begin{align*}
+P(X, \vec{\theta}) &= P(X, \mu, \sigma^2) \\
+&= P(X)P(\mu)P(\sigma^2) \\
+&\propto (\sigma^2)^{-\frac{n}{2}} e^{-\frac{\sum_{i=1}^{n} (x_i-\mu)^2}{2\sigma^2}} \cdot 1 \cdot 1
+\end{align*}
+$$
+This represents what our joint is proportional to.
+
+## Finding the Conditionals
+
+So, at this point we now know the pdf for our joint distribution but we still don't know the values the parameters $\mu$ and $\sigma^2$. We need to explore their parameter spaces with gibbs sampling to converge to what they could be!
+
+Their parameter spaces are defined by the following conditionals,
+
+$$
+\sigma^2 | \mu, X \\
+\mu | \sigma^2, X
+$$
+where X is the observed values.
+
+To find these conditionals we must apply the conditional theorem below:
+
+
+\begin{align*}
+P(A| B,C) &= \frac{P(A,B|C)}{P(B|Y)} \\
+\Rightarrow P(\sigma^2 | X_1, \ldots, X_n, \mu) &= \frac{P(\mu, \sigma^2 |  X_1, \ldots, X_n)}{\underbrace{P(\mu |X_1, \ldots, X_n)}_{\text{Constant}}}  \propto P(\mu, \sigma^2 |  X_1, \ldots, X_n) \\
+
+P(\mu, \sigma^2 |  X_1, \ldots, X_n) &= (\sigma^2)^{-\frac{n}{2}} e^{-\frac{\sum_{i=1}^{n} (x_i-\mu)^2}{2\sigma^2}}
+\end{align*}
+
+And a very similar procedure is followed for the $\mu$ conditional.
+
+It's also important to note our conditionals *must be PDFs*, meaning under the curve must integrate to one. To avoid the stresses of normalization, we can simply try to define our resulting conditionals by known distributions. 
+
+### Finding the $\sigma^2$
+
+In this scenario, $\mu$ and $Y$ are constant. We can fit this into the Inverse Gamma Distribution.
+
+$$
+f_{\text{Inverse Gamma}}(x) = \frac{\beta^{\alpha}}{\Gamma(\alpha)}x^{-\alpha-1} e^{\frac{-\beta}{x}}
+$$
+
+Matching the powers of $x$ gives:
+$$
+\begin{align*}
+-\alpha-1 &= (\alpha+1) \\
+\frac{n}{2} &= \alpha + 1 \\
+\frac{n}{2}-1 = \alpha
+\end{align*}
+$$
+The $\beta$ is easier to see:
+
+$$
+\beta = \frac{\sum_{i=1}^n(x_i - \mu)^2}{2} = \frac{\text{SSE}}{2}
+$$
+Putting this together gives:
+
+$$
+\begin{align*}
+P(\sigma^2 | \vec{X}, \mu) &= \underbrace{\frac{(\frac{\text{SSE}}{2})^{\frac{n}{2}-1}}{\Gamma(\frac{n}{2}-1)}}_{\text{Constant}}(\sigma^2)^{-\frac{n}{2}} e^{-\frac{\text{SSE}}{2\sigma^2}} \\
+& \propto (\sigma^2)^{-\frac{n}{2}} e^{-\frac{\text{SSE}}{2\sigma^2}} \\
+\Rightarrow & \sigma^2 | \vec{X}, \mu \sim \text{InvGamma}(\frac{n}{2}-1, \frac{SSE}{2})
+\end{align*}
+$$
+
+### Finding $\mu$
+
+Here, we find that $mu \sim N(\bar{x}, \frac{\sigma^2}{n})$, which makes sense since the standard deviation here is the variance of the sample mean and $\mu$ represents our mean. To come to this conclusion, you have to do the following trick:
+
+\begin{align*}
+\sum^n_{i=1}(y_i - \mu)^2 &= \sum^n_{i=1}[(y_i - \bar{x})^2 + (\bar{x}-\mu)^2] \\
+&= \underbrace{\sum^n_{i=1}(y_i - \bar{x})^2}_{\text{constant}} + n(\mu-\bar{x})^2 \\
+&\propto n(\mu-\bar{x})^2 \\
+
+\Rightarrow P(\mu | \vec{X}, \sigma^2) &=  (\sigma^2)^{-\frac{n}{2}}e^{-\frac{n(\mu-\bar{x})^2}{2\sigma^2}} \\
+
+&\mu | \vec{X}, \sigma^2 \sim N(\bar{x}, \frac{\sigma^2}{n})
+\end{align*} 
+
+Now we have the two distributions we can sample from to perform our Gibbs Sampling.
+
+## Performing the Gibbs Sampling
+
+First, it's always easiest to set up the function that actually moves through the parameter space first:
+
+```{r gibbs_func}
+library(invgamma) # required for inverse gamma generation
+
+# constants for calculations
+x_bar <- mean(obs) 
+alpha <- (n_obs/2)-1
+
+# Function returning a SINGLE sample from the parameter space
+gibbs_sample <- function(last_mu, last_sigsqr ) { # based on the last one
+  
+  new_mu <- rnorm(1, mean=x_bar, sd = last_sigsqr/n_obs)
+  new_sigsqr <- rinvgamma(1, shape = alpha, rate = (sum((obs - new_mu)^2))/2)
+  
+  return(c(new_mu, new_sigsqr)) # the new sample
+}
+# I don't think i need both parameter intakes, but it feels unbalanced if i
+# remove them
+
+```
+Now, we can actually run the simulation:
+
+```{r simulation}
+init_mu <- 0 # where we start
+init_sigsqr <- 0
+
+runs <- 5000
+samples <- matrix(NA, nrow=runs, ncol=2)
+
+for (i in 1:runs) {
+  #sampling and saving
+  gibber <- gibbs_sample(init_mu, init_sigsqr)
+  samples[i,1] <- gibber[1]
+  samples[i,2] <-gibber[2]
+  
+  # Updating the initalization values
+  init_mu <- gibber[1]
+  init_sigsqr <- gibber[2]
+}
+```
+A trace plot, showing convergence to the true mu and sigma is shown below:
+
+```{r trace_plot}
+trace_data <- as.data.frame(samples)
+trace_data$iteration <- seq_len(runs)
+
+trace_data <- pivot_longer(
+  trace_data,
+  cols = c(V1, V2),
+  names_to = "parameter",
+  values_to = "draw"
+)
+
+trace_data$parameter <- factor( # I'm confused on why this fixes plots
+  trace_data$parameter,
+  levels = c("V1", "V2"),
+  labels = c("Mu", "Sigma Squared")
+)
+reference <- data.frame(
+  parameter = c("Mu", "Sigma Squared"),
+  posterior_mean = c(true_mu, true_sigma_sqr)
+)
+
+ggplot(trace_data, aes(x = iteration, y = draw)) +
+  geom_line(linewidth = 0.3, alpha = 0.7) +
+  geom_hline(
+    data = reference,
+    aes(yintercept = posterior_mean),
+    colour = "firebrick",
+    linetype = "dashed"
+  ) +
+  facet_wrap(~ parameter, ncol = 1) +
+  labs(x = "Gibbs iteration", y = "Sampled value") +
+  theme_minimal()
+```
