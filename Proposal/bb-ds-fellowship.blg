@@ -4,49 +4,48 @@ The top-level auxiliary file: bb-ds-fellowship.aux
 The style file: plainnat.bst
 Database file #1: bb-ds-fellowship.bib
 Warning--empty year in noauthor_gibbs_nodate
-Warning--empty year in geyer_mcmcburn_nodate
 Warning--empty publisher in tsun_maximum_nodate
 Warning--empty year in tsun_maximum_nodate
 Warning--empty year in tsun_maximum_nodate
 You've used 10 entries,
             2773 wiz_defined-function locations,
-            660 strings with 6959 characters,
-and the built_in function-call counts, 4065 in all, are:
-= -- 354
+            661 strings with 6960 characters,
+and the built_in function-call counts, 4068 in all, are:
+= -- 355
 > -- 225
 < -- 7
 + -- 79
 - -- 69
-* -- 307
-:= -- 649
+* -- 309
+:= -- 650
 add.period$ -- 43
 call.type$ -- 10
 change.case$ -- 52
 chr.to.int$ -- 10
-cite$ -- 25
+cite$ -- 24
 duplicate$ -- 182
 empty$ -- 345
 format.name$ -- 81
-if$ -- 845
+if$ -- 846
 int.to.chr$ -- 1
 int.to.str$ -- 1
 missing$ -- 8
 newline$ -- 69
 num.names$ -- 40
-pop$ -- 127
+pop$ -- 126
 preamble$ -- 1
 purify$ -- 43
 quote$ -- 0
-skip$ -- 138
+skip$ -- 137
 stack$ -- 0
 substring$ -- 56
-swap$ -- 13
+swap$ -- 14
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 95
-warning$ -- 5
+warning$ -- 4
 while$ -- 31
 width$ -- 0
-write$ -- 154
-(There were 5 warnings)
+write$ -- 155
+(There were 4 warnings)

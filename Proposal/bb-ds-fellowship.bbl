@@ -10,6 +10,11 @@ ritvikmath ~.
 \newblock Gibbs {Sampling}: {Data} {Science} {Concepts}.
 \newblock URL \url{https://www.youtube.com/watch?v=7LB1VHp4tLE}.
 
+\bibitem[Cook(2016)]{cook_mcmc_2016}
+John Cook.
+\newblock {MCMC} burn-in, January 2016.
+\newblock URL \url{https://www.johndcook.com/blog/2016/01/25/mcmc-burn-in/}.
+
 \bibitem[Gelman(n.d.)]{datasets_BDA}
 Andrew Gelman.
 \newblock Data from examples in bayesian data analysis, n.d.
@@ -20,11 +25,6 @@ Andrew Gelman, John~B. Carlin, Hal~S. Stern, David~B. Dunson, Aki Vehtari, and D
 \newblock \emph{Bayesian data analysis}.
 \newblock Texts in statistical science. CRC Press, Taylor \& Francis Group, Boca Raton, third edition edition, 2014.
 \newblock ISBN 978-1-4398-4095-5 978-1-4398-9820-8.
-
-\bibitem[Geyer()]{geyer_mcmcburn_nodate}
-Charles Geyer.
-\newblock {MCMC}/{Burn}.
-\newblock URL \url{https://users.stat.umn.edu/~geyer/mcmc/burn.html}.
 
 \bibitem[Guo et~al.(2015)Guo, Gabry, Goodrich, Johnson, Weber, and Badr]{guo_rstan_2015}
 Jiqiang Guo, Jonah Gabry, Ben Goodrich, Andrew Johnson, Sebastian Weber, and Hamada~S. Badr.

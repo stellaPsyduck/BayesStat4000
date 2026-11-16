@@ -1,0 +1,14 @@
+@article{LaplaceMemoir,
+ ISSN = {08834237, 21688745},
+ URL = {http://www.jstor.org/stable/2245475},
+ abstract = {Laplace's first major article on mathematical statistics was published in 1774. It is arguably the most influential article in this field to appear before 1800, being the first widely read presentation of inverse probability and its application to both binomial and location parameter estimation. After a brief introduction, and English translation of this epochal memoir is given.},
+ author = {Stephen M. Stigler},
+ journal = {Statistical Science},
+ number = {3},
+ pages = {359--363},
+ publisher = {Institute of Mathematical Statistics},
+ title = {Laplace's 1774 Memoir on Inverse Probability},
+ urldate = {2026-11-02},
+ volume = {1},
+ year = {1986}
+}
