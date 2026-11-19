@@ -1,0 +1,107 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Data and Background
+
+For this part, we are going to reference Jeremy Balka's (Simple Linear Regression example)[https://www.jbstatistics.com/simple-linear-regression-an-example/] that uses data from Anapaca Island pelicans. It explores how DDT levels affect the thickness of the bird's eggs.
+```{r, echo=FALSE}
+anacapa <- read.table(
+  text = "
+sample_no thickness_mm DDE total_DDT PCB
+15 0.14 2500 2571 452
+85 0.19 1337 1382 184
+14 0.20 1003 1055 115
+65 0.20 1780 1875 315
+64 0.21 1780 1862 139
+58 0.22 617 647 177
+59 0.22 1310 1376 214
+66 0.22 2145 2219 356
+101 0.23 1623 1660 166
+43 0.23 1638 1694 246
+1 0.23 1760 1764 177
+41 0.23 1925 2020 289
+84 0.24 1410 1454 175
+3 0.25 1458 1525 296
+19 0.25 1495 1586 205
+50 0.26 860 965 324
+72 0.26 1220 1296 260
+31 0.26 1290 1353 188
+27 0.26 1380 1425 208
+86 0.27 950 981 109
+55 0.28 600 648 204
+46 0.28 641 663 89
+52 0.28 1205 1280 320
+70 0.29 569 569 265
+2 0.29 862 898 138
+12 0.29 1170 1215 198
+70 0.29 1373 1442 191
+48 0.29 1940 1956 193
+32 0.29 2100 2192 316
+17 0.30 613 632 122
+102 0.30 800 850 305
+24 0.30 1060 1096 203
+93 0.30 1418 1478 396
+103 0.30 1430 1490 250
+124 0.30 2010 2031 230
+104 0.30 2379 2440 214
+105 0.31 301 305 46
+49 0.31 1560 1622 256
+63 0.32 1680 1758 204
+21 0.34 748 780 150
+42 0.34 1405 1473 218
+69 0.34 1435 1490 261
+16 0.35 969 999 143
+54 0.35 1080 1132 229
+37 0.36 949 975 173
+67 0.36 1275 1316 132
+22 0.36 1355 1418 175
+74 0.37 703 734 236
+30 0.37 1055 1091 220
+29 0.37 1140 1176 212
+90 0.39 390 403 119
+88 0.39 441 462 144
+79 0.39 882 928 147
+96 0.40 700 733 171
+91 0.41 895 943 216
+11 0.41 1430 1513 232
+94 0.42 745 783 216
+87 0.42 850 879 164
+92 0.42 890 921 185
+89 0.44 416 438 87
+98 0.46 625 645 216
+95 0.46 785 824 199
+97 0.47 755 768 236
+100 0.49 657 672 237
+99 0.49 686 708 206
+",
+  header = TRUE
+)
+
+anacapa$locality <- "Anacapa"
+anacapa <- anacapa[c("locality", "sample_no", "thickness_mm",
+                       "DDE", "total_DDT", "PCB")]
+```
+
+By using this example, we can compare his intercept and covariate coefficient (for DDT) to the our bayesian found ones.
+
+```{r simple_plot}
+
+plot(anacapa$total_DDT, anacapa$thickness_mm, xlab="DDT (ppm)",
+     ylab ="Shell Thickness (mm)", main="DDT Affect on Shell Thickness")
+
+# 1. Fit a linear model
+model <- lm(thickness_mm ~ total_DDT, data = anacapa)
+
+# 2. Extract residuals
+res <- resid(model)
+
+# 3. Plot basic histogram
+hist(res, 
+     main = "Histogram of Residuals", 
+     xlab = "Residuals", 
+     col = "lightblue", 
+     border = "black")
+
+```

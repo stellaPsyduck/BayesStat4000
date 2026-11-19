@@ -1,19 +1,21 @@
 ---
 title: "Simplest Example - 1D Parameter Search"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 # Observed Data
 
 We will generate normal data and try and pretend it's from some unknown population. Our goal is to use Bayesian estimation to find the true $\sigma^2$ and $\mu$. 
 
-```{r generating_normal, echo=FALSE}
+```{r generating_normal}
 library(ggplot2)
 set.seed(68)
 
 n_obs <- 20
-true_mu <- 0
-true_sigma_sqr <- 1
+true_mu <- 3
+true_sigma_sqr <- 4
 
 obs <- rnorm(n_obs, mean=true_mu, sd=sqrt(true_sigma_sqr))
 hist(obs, probability = TRUE,
@@ -22,6 +24,7 @@ hist(obs, probability = TRUE,
 
 
 ```
+
 At this point we know that this data is following a normal distribution, but we just don't know the true mean and variance. 
 
 # Choosing Priors
@@ -57,8 +60,8 @@ First let's find the priors.
 $$
 \begin{align*}
 P(\vec{\theta}) &= P(\mu, \sigma^2) \\
-&= P(\mu)P(\sigma^2) \text{   because i.i.d.}\\
-&= 1 
+&= P(\mu)P(\sigma^2)   \text{   because i.i.d.}\\
+&= 1
 \end{align*}
 $$
 We also know the pdf of the likelihood, since we are assuming the observed data is normally distributed.
@@ -99,13 +102,13 @@ where X is the observed values.
 
 To find these conditionals we must apply the conditional theorem below:
 
-
+$$
 \begin{align*}
 P(A| B,C) &= \frac{P(A,B|C)}{P(B|Y)} \\
 \Rightarrow P(\sigma^2 | X_1, \ldots, X_n, \mu) &= \frac{P(\mu, \sigma^2 |  X_1, \ldots, X_n)}{\underbrace{P(\mu |X_1, \ldots, X_n)}_{\text{Constant}}}  \propto P(\mu, \sigma^2 |  X_1, \ldots, X_n) \\
-
 P(\mu, \sigma^2 |  X_1, \ldots, X_n) &= (\sigma^2)^{-\frac{n}{2}} e^{-\frac{\sum_{i=1}^{n} (x_i-\mu)^2}{2\sigma^2}}
 \end{align*}
+$$
 
 And a very similar procedure is followed for the $\mu$ conditional.
 
@@ -145,17 +148,15 @@ $$
 ### Finding $\mu$
 
 Here, we find that $mu \sim N(\bar{x}, \frac{\sigma^2}{n})$, which makes sense since the standard deviation here is the variance of the sample mean and $\mu$ represents our mean. To come to this conclusion, you have to do the following trick:
-
+$$
 \begin{align*}
 \sum^n_{i=1}(y_i - \mu)^2 &= \sum^n_{i=1}[(y_i - \bar{x})^2 + (\bar{x}-\mu)^2] \\
 &= \underbrace{\sum^n_{i=1}(y_i - \bar{x})^2}_{\text{constant}} + n(\mu-\bar{x})^2 \\
 &\propto n(\mu-\bar{x})^2 \\
-
 \Rightarrow P(\mu | \vec{X}, \sigma^2) &=  (\sigma^2)^{-\frac{n}{2}}e^{-\frac{n(\mu-\bar{x})^2}{2\sigma^2}} \\
-
 &\mu | \vec{X}, \sigma^2 \sim N(\bar{x}, \frac{\sigma^2}{n})
 \end{align*} 
-
+$$
 Now we have the two distributions we can sample from to perform our Gibbs Sampling.
 
 ## Performing the Gibbs Sampling
@@ -184,12 +185,13 @@ gibbs_sample <- function(last_mu, last_sigsqr ) { # based on the last one
 Now, we can actually run the simulation:
 
 ```{r simulation}
-init_mu <- 0 # where we start
-init_sigsqr <- 0
+init_mu <- 50 # where we start
+init_sigsqr <- 50
 
 runs <- 5000
 samples <- matrix(NA, nrow=runs, ncol=2)
 
+set.seed(68)
 for (i in 1:runs) {
   #sampling and saving
   gibber <- gibbs_sample(init_mu, init_sigsqr)
@@ -203,36 +205,79 @@ for (i in 1:runs) {
 ```
 A trace plot, showing convergence to the true mu and sigma is shown below:
 
-```{r trace_plot}
-trace_data <- as.data.frame(samples)
-trace_data$iteration <- seq_len(runs)
+```{r trace_plot, echo=FALSE}
+library(tidyr)
+library(ggplot2)
+
+trace_data <- data.frame(
+  iteration = seq_len(nrow(samples)),
+  mu = samples[, 1],
+  sigma_sqr = samples[, 2]
+)
 
 trace_data <- pivot_longer(
   trace_data,
-  cols = c(V1, V2),
+  cols = c(mu, sigma_sqr),
   names_to = "parameter",
   values_to = "draw"
 )
 
-trace_data$parameter <- factor( # I'm confused on why this fixes plots
-  trace_data$parameter,
-  levels = c("V1", "V2"),
-  labels = c("Mu", "Sigma Squared")
-)
 reference <- data.frame(
-  parameter = c("Mu", "Sigma Squared"),
-  posterior_mean = c(true_mu, true_sigma_sqr)
+  parameter = c("mu", "sigma_sqr"),
+  true_value = c(true_mu, true_sigma_sqr)
+)
+
+strip_labels <- c(
+  mu = '"Sampled" ~ mu',
+  sigma_sqr = '"Sampled" ~ sigma^2'
 )
 
 ggplot(trace_data, aes(x = iteration, y = draw)) +
   geom_line(linewidth = 0.3, alpha = 0.7) +
   geom_hline(
     data = reference,
-    aes(yintercept = posterior_mean),
+    aes(yintercept = true_value),
     colour = "firebrick",
     linetype = "dashed"
   ) +
-  facet_wrap(~ parameter, ncol = 1) +
+  facet_wrap(
+    ~ parameter,
+    ncol = 1,
+    labeller = as_labeller(strip_labels, default = label_parsed)
+  ) +
   labs(x = "Gibbs iteration", y = "Sampled value") +
   theme_minimal()
 ```
+
+And, just for interest, the parameter space is from the simulation is plotted below:
+
+```{r param_space, echo=FALSE}
+library(latex2exp) # latex in labs
+
+## plotting the simulation
+df_samples <- data.frame(samples)
+ggplot(df_samples, aes(x = X1, y = X2)) +
+                       # xmin = -4, xmax=4,
+                       # ymin= -4, ymax=4)) +
+  geom_point(color = "black", alpha = 0.2, size = 0.75) +
+  labs(
+    title = "Gibbs samples",
+    x = TeX(r"(Sampled $\mu$)"),
+    y = TeX(r"(Sampled $\sigma^2$)")
+  ) +
+  theme_minimal()
+```
+
+Assuming there's a 500 sample burn-in period, we can look at the sampled distributions for both parameters. I just used the "FD" calculation of bins to follow the Freedman–Diaconis rule.
+
+```{r dist_samp_mu} 
+samp_mu <- samples[-500,1]
+hist(samp_mu, xlab="Values", ylab="Frequency", main="Distribution of the Sampled Mu", "FD")
+```
+
+```{r dist_samp_sigsqr} 
+samp_mu <- samples[-500,2]
+hist(samp_mu, xlab="Values", ylab="Frequency", main="Distribution of the Sampled Variance", "FD")
+```
+
+I think this makes sense? The sampled variance is giving very chi-squared and the mean is normal looking. 
