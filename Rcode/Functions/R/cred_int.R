@@ -2,16 +2,15 @@
 #'
 #' Calculates the credible interval
 #'
-#' @param samples
+#' @param samples vector of samples to find interval of
+#' @param alpha the confidence level of interest
 #'
-#' @return list of the "l"ower and "u"pper bounds
+#' @return list of the "low"er and "up"per bounds
 #' @export
 #'
 
-cred_int <- function(samples, level = 0.95) {
-  stopifnot(is.numeric(samples), length(samples) > 0,
-            all(is.finite(samples)), level > 0, level < 1)
+cred_int <- function(samples, alpha=0.05) {
+  credInt = quantile(samples, c(alpha*0.5,(1 - alpha*0.5)))
 
-  alpha <- 1 - level
-  quantile(samples, probs = c(alpha / 2, 1 - alpha / 2))
+  return(list(low= credInt[1], up= credInt[2]))
 }
