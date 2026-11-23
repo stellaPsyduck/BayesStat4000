@@ -1,0 +1,244 @@
+---
+title: "ConjugatePrior"
+author: "stellaRovazzi"
+date: "2026-11-20"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Background
+
+This follows the [RPub](https://rpubs.com/andresmtnezglez/1040031) tutorial.
+
+In this example we will generate random variables following $Y \sim N(4,5)$. Then, we will pretend we don't know the true values and aim to find the distribution parameters for $Y \sim N(\mu, \sigma)$.
+
+```{r generating_obs}
+set.seed(78)
+
+n_obs <- 1000
+true_mu <- 3
+true_sig <- 2
+
+obs <- rnorm(n_obs, mean=true_mu, sd=true_sig)
+mean_obs <- mean(obs) 
+
+hist(obs, main="Histogram of Observed Data", ylab="Frequency", xlab="Value",col = "#BBD7EA", border = "white", "FD")
+```
+# Finding Conditionals
+
+We need to actually set up functions for our gibbs sampler to use, so it can properly traveerse the parameter space.
+
+## Priors (conjugate)
+
+For our mean, we choose a normal distribution.
+
+$$ 
+\mu \sim N(\mu_{\mu}, \sigma_{\mu})
+$$
+
+```{r plot_mean_prior}
+mean_data <- rnorm(1000, mean=1, sd=3)
+
+hist(mean_data, main = "N(1,3) Distribution", xlab = "Value", ylab="Frequency")
+abline(v = 3, col = "red", lwd = 2)
+```
+For our standard deviation, we choose the Gamma distribution, which makes sense since the value cannot be negative.
+
+$$ 
+\sigma \sim \text{Gamma}(a, b)
+$$
+
+```{r plot_mean_prior}
+gamma_data <- rgamma(1000, 1, 1)
+
+hist(gamma_data, main = "Gamma(1,1) Distribution", xlab = "Value", ylab="Frequency")
+abline(v = (1/4)**2, col = "red", lwd = 2)
+```
+```{r}
+library(latex2exp)
+old_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2), mar = c(8, 4, 3, 1), bg = "white")
+
+hist(gamma_data, "FD",
+     main = TeX(r"($\tau \sim$Gamma(1, 1))"),
+     xlab = "Value", ylab = "Frequency",
+     col = "#BBD7EA", border = "white")
+abline(v = (1/2)**2, col = "#C43C39", lwd = 3)
+
+hist(mean_data, "FD",
+     main = TeX(r"($\mu \sim$Normal(1, 3))"),
+     xlab = "Value",
+     col = "#BBD7EA", border = "white")
+abline(v = 3, col = "#C43C39", lwd = 3)
+
+par(old_par)
+```
+## Conditionals
+
+This is found by following:
+
+$$
+\begin{align*}
+\underbrace{P(\vec{\theta}| \vec{Y})}_{\text{Posterior}} &\propto \underbrace{P(\vec{Y}|\vec{\theta})}_{Likelihood} \underbrace{P(\vec{\theta})}_{Priors}\\
+\Rightarrow P(\vec{\theta}|\vec{Y}) &\propto \underbrace{P(\vec{Y}, \vec{\theta})}_{Joint}
+\end{align*} 
+$$
+
+Then pulling the two conditionals out of the joint! The best way to ensure this remains normalized is by shoving this into a known distribution's form.
+
+Note: $\tau = \frac{1}{var(y)}$.
+
+The tutorial did the heavy lifting for us and derived bot conditionals, shown below:
+
+$$
+\mu|\tau,y \sim N\left( \frac{n\bar{y}\tau+\mu_{\mu}\tau_{\mu}}{n\tau+\tau_{\mu}}, n\tau+\tau_{\mu} \right)
+$$
+
+$$
+\sigma|\mu,y \sim Gamma\left(a+n/2,b+\frac{1}{2}\sum_i(y_i-\mu)^2\right)
+$$
+# Gibbs Sampling
+
+Below is the code to set up the general Gibbs sampler.
+```{r}
+# Actual Gibb Sampling function - input is the last position in param space
+gibbs_sampler <- function(last_mu, last_tau,
+                          arb_constants, obs) { # will need to define how
+                                           # arb constants need to be saved
+  # set up for mu calculation
+  mu_mean <-  ((sum(obs)*last_tau)+(arb_constants$mu_mu*arb_constants$tau_mu))/
+                        ((n_obs*last_tau)+arb_constants$tau_mu)
+  mu_tau <- (n_obs*last_tau) + arb_constants$tau_mu
+  mu <- rnorm(1, mean=mu_mean, sd = 1/sqrt(mu_tau)) # I think
+  
+  # set up for sigma calculation
+  shape <- arb_constants$a + (n_obs)/2
+  rate <- arb_constants$b + 0.5*(sum((obs - mu)**2))
+  tau <- rgamma(1, shape, rate)
+  
+  # returning the new sample - in an end-user friendly manner
+  return(list(mu=mu, tau=tau)) 
+}
+
+```
+
+After setting up the function we can actually run the simulation:
+
+```{r simulation}
+
+run_gibb <- function (inital_mu, inital_tau, arb_constants,
+                      obs=NULL, runs=5000, seed=666) {
+  
+  set.seed(seed)
+  samples <- matrix(NA, nrow=runs, ncol=2,
+                    dimnames = list(NULL, c("mu", "tau"))) # user friendly?
+  
+  start_mu <- inital_mu
+  start_tau <- inital_tau
+    
+  for (i in 1:runs) {
+    #sampling and saving
+    gibber <- gibbs_sampler(start_mu, start_tau, arb_constants, obs=obs)
+    samples[i,1] <- gibber$mu
+    samples[i,2] <-gibber$tau
+    
+    # Updating the initalization values
+    start_mu <- gibber$mu
+    start_tau <- gibber$tau
+  }
+  
+  return(list(mu=samples[,1], tau=samples[,2]))
+}
+
+# Function to ensure your constants are in a function friendly format
+save_constants <- function(sampler="norm_conj", #sampler
+                           mu_mu=0, tau_mu=0.05, a=3, b=2, #normal conjugate
+                           test=0) {
+  if (sampler == "norm_conj") {
+      return(list(mu_mu=mu_mu, tau_mu=tau_mu, a=a, b=b))
+  } else if (sampler == "test") {
+      print("bleh")
+      return(list=test)
+  }
+}
+
+burn_it <- function(samples, burn_len=500) {
+  return(samples[burn_len:length(samples)])
+}
+
+
+```
+
+## Assessing Convergence
+
+Below is the function to actually run the trace plot:
+
+```{r}
+library(tidyr)
+library(ggplot2)
+runs <- 50000
+init_mu <- mean(obs)
+init_tau <- 1 / var(obs)
+
+# note: this actually didn't converge with 2 or 3 as the mean wtf
+arb_constants <- save_constants("norm_conj", 1, 3, 1, 1) # the defaults are best tbh
+samples <- run_gibb(init_mu, init_tau, arb_constants, obs=obs, runs=runs)
+
+trace_conj <- func(samples) {
+  trace_data <- data.frame(
+    iteration = seq_along(samples$mu),
+    mu = samples$mu,
+    tau = samples$tau
+  ) |>
+    dplyr::filter(iteration %% 5 == 0) |>
+    tidyr::pivot_longer(c(mu, tau),
+                        names_to = "parameter",
+                        values_to = "draw")
+  
+    reference <- data.frame(
+      parameter = c("mu", "tau"),
+      true_value = c(true_mu, 1/(true_sig**2))
+    )
+  
+    strip_labels <- c(
+      mu = '"Sampled" ~ mu',
+      tau = '"Sampled" ~ tau'
+    )
+  
+    ggplot(trace_data, aes(x = iteration, y = draw)) +
+      geom_line(linewidth = 0.3, alpha = 0.7) +
+      geom_hline(
+        data = reference,
+        aes(yintercept = true_value),
+        colour = "firebrick",
+        linetype = "dashed"
+      ) +
+      facet_wrap(
+        ~ parameter,
+        ncol = 1,
+        labeller = as_labeller(strip_labels, default = label_parsed),
+        scales = "free_y"
+      ) +
+      labs(x = "Gibbs iteration", y = "Sampled value") +
+      theme_minimal()
+}
+
+```
+## Putting this all together
+
+Below is the usage of all the functions
+```{r}
+hist(burn_it(samples$mu, burn_len=1000), "FD",
+     main = TeX(r"(Samples of $\mu$)"),
+     xlab = "Value", ylab = "Frequency",
+     col = "#BBD7EA", border = "white")
+```
+```{r}
+hist(burn_it(samples$tau), "FD",
+     main = TeX(r"(Samples of $\tau$)"),
+     xlab = "Value", ylab = "Frequency",
+     col = "#BBD7EA", border = "white")
+```

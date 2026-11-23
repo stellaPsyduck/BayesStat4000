@@ -1,0 +1,13 @@
+Package: BayesianPackage
+Title: Helps with Statistical Computing Bayesian Examples
+Version: 0.0.0.9000
+Authors@R: 
+    person("Stella", "Rovazzi", , "srovazzi@uoguelph.ca", role = c("aut", "cre"))
+    person("Brenden", "Doogan", , "bdoogan@uoguelph.ca", role = c("aut", "cre"))
+    person("Ramez", "Elprince", , "relprinc@uoguelph.ca", role = c("aut", "cre"))
+Description: 
+    Helps run Gibbs Sampler simulations for our STAT4000 project
+License: use_gpl3_license()
+Config/roxygen2/version: 8.1.1
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)

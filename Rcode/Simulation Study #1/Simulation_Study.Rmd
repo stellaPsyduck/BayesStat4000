@@ -1,0 +1,322 @@
+---
+title: A Simulation Study on Data Swamping
+author:
+    name: Stella Rovazzi, Brenden Doogan, Ramez Laprince
+    email: srovazzi@uoguelph,ca
+    affiliation: University of Guelph
+journal: "STAT*4000"
+date: "`r Sys.Date()`"
+bibliography: references.bib  
+csl: the-journal-of-the-acoustical-society-of-america-numeric.csl
+nocite: '@*'
+params:
+  do_calcs: FALSE
+classoption: preprint, 3p, authoryear
+linenumbers: false
+numbersections: true
+output: 
+  rticles::elsevier_article:
+    keep_tex: false
+abstract: |
+  This report contains a simulation study to evaluate the accuracy of the Welch t-test, Kolmogorov-Smirnov test and the Wilcoxon rank test for comparing two samples in situations where one of the samples has potential outliers. For the p-value calculation, we consider a permutation-based approach as implemented in our R-permtests package, and the p-values reported based on the theoretical null distributions, as implemented in base R. Our findings suggest that for the Welch and Wilcoxon tests, the contamination proportion and variance levels do not have any obvious effect on the Type 1 error rate, as these tests are comparing the population means and medians, repectively. On the other hand, comparing the underlying distributions, the Kolmogorov-Smirnov test is able to detect the differences between the two samples as the contamination proportion and variance increase in the second sample. 
+header-includes:
+  - \linespread{1.3}
+  - \newcommand{\R}{{\textsf{R}}}
+  - \usepackage{graphics,color,graphicx}
+  - \usepackage{url}
+  - \usepackage{tabularx}
+  - \usepackage{cancel}
+  - \definecolor{shadecolor}{RGB}{225, 225, 225}
+---
+
+
+
+We will conduct a simulation study to understand how the accuracy of a posterior changes based on the number of observed data points. This is motivated by the idea of data swamping the prior [@efron2015frequentist]. For the test we will test various weakly informed priors against the changing number of observations. We will compare the sampled posterior distributions by their bias, coverage, and shape. 
+
+
+# Simulation Setup
+
+We will aim to estimate the mean and standard deviation of a normal distribution with a Gibbs sampler. The priors are as follows:
+
+$$ 
+\mu \sim N(\mu_{\mu}, \sigma_{\mu}) \\
+\tau \sim Gamma(a,b)
+$$
+with tau being the precision ($\tau=\frac{1}{\sigma^2}$) [@martinez2023gibbs]. A good conjugate prior found for $\sigma^2$ is inverse gamma, so it's easier to just sample from the precision instead [@jordan2010conjugate]. 
+
+## Simulated Data
+
+For the observed data, we will use a simple Normal(3,2). There will be data sets of size 20, 50, 100, and 500.
+
+```{r, echo=FALSE}
+set.seed(666)
+curve(dnorm(x, mean = 3, sd = 2), from = -4, to = 10, lwd = 2, ylab = "Density")
+
+obs_20 <- rnorm(20, mean=3, sd=2)
+obs_50 <- rnorm(50, mean=3, sd=2)
+obs_100 <- rnorm(100, mean=3, sd=2)
+obs_500 <- rnorm(500, mean=3, sd=2)
+```
+
+## Possible Priors
+
+```{r, echo=FALSE}
+curve(dnorm(x, mean = 0, sd = 1), from = -4, to = 10, lwd = 2, col="red", ylab = "Density",
+            main="Prior Options for Mu")
+curve(dnorm(x, mean = 2, sd = 2), lwd = 2, col="blue", add = TRUE)
+curve(dnorm(x, mean = 4, sd = 2), lwd = 2, col="green", add = TRUE)
+curve(dnorm(x, mean = 7, sd = 1), lwd = 2, col = "purple",add = TRUE)
+abline(v = 3, lwd = 2)
+
+legend("topleft",                                
+       legend = c("N(0,1)", "N(2,2)", "N(4,2)", "N(7,1)"),     
+       col = c("red", "blue","green","purple"),
+       lty = c(1),
+       lwd = c(2))  
+```
+```{r, echo=FALSE}
+curve(dgamma(x, 0.5, 2), from = 0, to = 4, lwd = 2, col="red", ylab = "Density",
+            main="Prior Options for Tau",ylim=c(0, 2.5) )
+curve(dgamma(x, 1,1), lwd = 2, col="blue", add = TRUE)
+curve(dgamma(x, 8,4), lwd = 2, col="green", add = TRUE)
+curve(dgamma(x, 3, 2), lwd = 2,  col = "purple",add = TRUE)
+abline(v = 1/4, lwd = 2) # 1/(sd**2)
+
+legend("topright",                                
+       legend = c("Gamma(0.5, 2)", "Gamma(1, 1)", "Gamma(8,4)", "Gamma(3, 2)"),     
+       col = c("red", "blue","green","purple"),
+       lty = c(1),
+       lwd = c(2))  
+```
+
+```{r setup, message = FALSE, echo = FALSE}
+library(BayesianPackage)
+
+# Saving possible options
+norm_values <- list(c(0,1), c(2,2), c(4,2), c(7,1))
+gamma_values <- list(c(0.5,2), c(1,1), c(8,4), c(3,2))
+normal_data <- list(obs_20, obs_50, obs_100, obs_500)
+```
+
+```{r}
+# Running the actual simulation study
+for (obs in seq_along(normal_data)) {
+  n_obs <- length(normal_data[[obs]])
+  
+  for (norm in seq_along(norm_values)) {
+    # print(norm_values[[norm]][1])
+    
+    for (gam in seq_along(gamma_values)) {
+      # print(paste(n_obs, norm, gam))
+      # actual code for the sampling
+      init_mu <- mean(normal_data[[obs]])
+      init_tau <- (1 / var(normal_data[[obs]]))
+      
+      arb_constants <- save_constants("norm_conj", norm_values[[norm]][1],
+                                      norm_values[[norm]][2],
+                                      gamma_values[[gam]][1],
+                                      gamma_values[[gam]][2])
+      
+      samples <- run_gibb(init_mu, init_tau, arb_constants,
+                          obs=normal_data[[obs]], runs=50000)
+      
+      # save the sample stuff
+      folder <- sprintf("outputs/obs%d_N%d_G%d", n_obs, norm, gam)
+      dir.create(folder, recursive = TRUE, showWarnings = FALSE)
+      
+      burnt <- burn_it(samples, burn_len=1)
+      
+      #saving csv
+      write.csv(
+          burnt,
+          file.path(folder, "samples"),
+          row.names = FALSE
+        )
+      
+      # Saving trace plots
+      ggplot2::ggsave(
+        filename = file.path(folder, "trace.png"),
+        plot = trace_conj(samples, 3, 2),
+        width = 8,
+        height = 5,
+        dpi = 300
+      )
+      
+      # Saving mu plot
+      png(file.path(folder, "mu.png"), width = 1600, height = 1000, res = 200)
+      
+      hist(burnt$mu, "FD",
+       main = TeX(r"(Samples of $\mu$)"),
+       xlab = "Value", ylab = "Frequency",
+       col = "#BBD7EA", border = "white")
+      
+      dev.off()
+      
+      # Saving tau plot
+      png(file.path(folder, "tau.png"), width = 1600, height = 1000, res = 200)
+      
+      hist(burnt$tau, "FD",
+         main = TeX(r"(Samples of $\tau$)"),
+         xlab = "Value", ylab = "Frequency",
+         col = "#BBD7EA", border = "white")
+      
+      dev.off()
+    }
+  }
+  
+}
+
+
+
+```
+
+
+# Simulation Results
+
+
+```{r sim, echo = FALSE, eval = params$do_calcs,  message = FALSE}
+
+# define simulation algorithm for contaminated normal
+
+rcnorm <- function(n, mean = c(0,0), sd = c(1,1), prob){
+  # z <- rbinom(n, 1, prob = prob)
+  # y1 <- rnorm(n, mean = mean[1], sd = sd[1])
+  # y2 <- rnorm(n, mean = mean[2], sd = sd[2])
+  # y <- ifelse(z==1, y1, y2)
+  y <- rep(NA, n)
+  for(j in 1:n){
+    z <- rbinom(1, 1, prob = prob)
+    if(z == 0) y[j] <- rnorm(1, mean = mean[1], sd = sd[1])
+    else if(z == 1) y[j] <- rnorm(1, mean = mean[2], sd = sd[2])
+  }
+  return(y)
+}
+
+# storage for simulation output
+pval_out <- vector("list", n_par)
+rej_rates <- matrix(NA, n_par, 6) 
+
+set.seed(131) 
+system.time({
+for(ii in 1:n_par){
+   nobs <- sim_par[ii,3]
+   res <- replicate(M, {
+   X <- rnorm(nobs)
+   Y <- rcnorm(nobs, mean = c(0,0), 
+               sd = c(1,sqrt(sim_par[ii,2])), 
+               prob = sim_par[ii,1])
+   pvals_perm <- perm_test(X, Y, test = "all", nperm = 100, alternative = "two.sided")
+   pvals_asym <- c(t.test(X,Y)$p.value, ks.test(X,Y)$p.value, wilcox.test(X,Y)$p.value)
+   c(pvals_perm, pvals_asym)
+})
+   pval_out[[ii]] <- t(res)
+   rej_rates[ii,] <- colMeans(pval_out[[ii]] < alpha)
+}
+})
+
+```
+
+
+```{r simres, include = FALSE}
+if(params$do_calcs) {
+  save(pval_out, rej_rates, file = "sim_res.RData")
+} else {
+  load("sim_res.RData")
+}
+```
+
+
+
+```{r tab1, echo = FALSE, message = FALSE}
+
+df <- cbind(sim_par, rej_rates[,c(1,4,3,6,2,5)])
+colnames(df) <- c("p", "var", "n", 
+                  "t-perm", "t-asym", 
+                  "w-perm", "w-asym", 
+                  "ks-perm", "ks-asym" )
+
+
+tibble(df) %>%
+ arrange(p,var) %>%
+ kable("latex", booktabs = TRUE, 
+       caption = "\\label{tab1} Empirical rejection rates of the Welch, 
+       Wilcoxon and Kolmogorov-Smirnov tests out of 1000 replications 
+       under different contamination settings.", 
+        col.names = c("p", "variance", "n", rep(c("Perm", "Asym"),3))) %>%
+  collapse_rows(column = 1:2) %>%
+  kable_styling(full_width = F) %>%
+  add_header_above(c(" " = 3, "Welch" = 2, "Wilcoxon"=2, "KS"=2))
+
+
+
+```
+
+
+
+
+
+
+
+```{r fig1, fig.width = 10, fig.height = 6, fig.align='center', out.width="100%", fig.cap = "\\label{fig1} Rejection rates of the two-sample tests across contamination proportions and variance levels.", echo = FALSE, message = FALSE}
+
+df %>% 
+  filter(n==100) %>%
+  group_by(p, var) %>% 
+  pivot_longer(cols= 4:9, 
+               names_sep = "-", 
+               names_to = c("test", "method"), 
+               values_to = "rate") %>%
+  mutate(test = factor(test, levels = c("t", "w", "ks"),
+                      labels = c("Welch", "Wilcoxon", "KS")),
+         p = factor(p), 
+         var = factor(var)) %>%
+  ggplot(aes(x = var, y = rate,
+               color = method,
+               linetype = p,
+               group = interaction(method, p))) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color="orange") +
+  facet_wrap(~ test) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  labs(x = "Variance", y = "Rejection Rate")
+
+
+
+```
+
+Under each setting, we generate samples from the two populations and calculate the Welch t-test, Kolmogorov-Smirnov test, and Wilcoxon rank test for the two-sided alternative hypothesis. The p-values for these tests are calculated using permutation tests implemented in `permtests` package, as well as based on the asymptotic distributions as implemented in \R. We repeated the experiments $M=1000$ times. The empirical rejection rates are reported in Table \ref{tab1} for the three tests with two p-value calculation methods.  
+ 
+For the Welch and Wilcoxon tests, the empirical rejection rates are usually close to the nominal significance level $\alpha = 0.05$. The method used in p-value calculation does not seem to have any obvious effect. This is expected as the samples are generated using a normal distribution. When there is high level of contamination in the second sample, the rejection rate can be as high as $0.072$, which differs significantly from the nominal level as the approximate confidence interval $(0.557, 0.088)$ does not contain $\alpha = 0.05$.
+
+The rejection rates for the Kolmogorov-Smirnov test gives the empirical Type 1 error when there is no contamination ($p=0$) and empirical power when $p=0.2$ and $0.4$, since the two samples come from different distributions under the latter settings. From the results, we observe that the Kolmogorov-Smirnov test usually attains the nominal $\alpha = 0.05$, and its power  increases with the contamination proportion and variance. The empirical Type 1 error can be as low as $0.029$, from which we obtain an approximate confidence interval $(0.018, 0.040)$. Hence, in some cases, it yields a significantly lower Type 1 error rate than the nominal level. 
+
+
+We focus on the case with $n_1=n_2=100$ and display the rejection rates of the three tests in Figure \ref{fig1}. For all three tests, the asymptotic and permutation-based test results are in close agreement, with rejection rates close to $\alpha = 0.05$ for the Welch and Wilcoxon tests. The Kolmogorov-Smirnov test is conservative with rejection rates consistently lower than $\alpha = 0.05$. However, this is the only test among the three which is able to detect the differences in the underlying distributions, with a higher power as the contamination proportion and variance level increase. 
+
+
+
+
+# Discussion
+
+
+Overall, our findings suggest that for the Welch and Wilcoxon tests, the contamination proportion and variance levels do not have any obvious effect on the Type 1 error rates, as these tests are comparing the population means and medians, repectively. On the other hand, comparing the underlying distributions, the Kolmogorov-Smirnov test is able to detect the differences between the two samples as the contamination proportion and variance increase in the second sample. 
+
+
+
+
+# Acknowledgement
+
+I, Elif Acar, confirm that I used the following tools:
+
+- material posted on the Courselink website for this course,
+- ChatGPT for confirming the permutation p-value calculation for the Kolmogorov-Smirnov test. See the full prompt at \url{https://chatgpt.com/share/692322cd-34c4-800a-9352-818d854d7492}.
+
+\clearpage
+
+# Appendix: All code for this report
+
+```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```
+
